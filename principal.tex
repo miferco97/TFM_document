@@ -1,0 +1,166 @@
+%\documentclass[]{dinel-upm}
+\documentclass[a4paper,twoside,12pt]{book}
+%\setlength{\columnsep}{0.7cm} % space between columns
+\usepackage{filecontents}
+\usepackage{gensymb}
+
+\usepackage{lipsum}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+
+\usepackage{afterpage}
+\usepackage[left=2.5cm,right=2.5cm,top=3cm,bottom=2.5cm]{geometry}
+\usepackage{tocloft}
+\usepackage{enumerate} 
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{wrapfig}
+\usepackage{graphicx,tabularx}
+\usepackage{eurosym}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{pdfpages}
+\usepackage{pdflscape}
+\usepackage{booktabs}
+\usepackage[hyphens]{url}
+\usepackage{ragged2e}
+\usepackage{caption}
+\DeclareCaptionListFormat{myfmt}{#1.#2}
+\usepackage[list=true,listformat=myfmt]{subcaption}
+
+%\usepackage{tikz}
+\usepackage[cuteinductors,americanvoltages,americancurrents,american]{circuitikz}
+
+\newcommand{\newItemUrl}[1]{\href{#1}{#1}}
+\newcommand{\tabitem}{~~\llap{--}~~}
+\newcommand{\newItem}[1]{\multicolumn{3}{|p{11cm}|}{\tabitem #1}\\}
+
+\newcommand\Tstrut{\rule{0pt}{2.6ex}} 
+\newcommand\Zstrut{\rule{0pt}{3.2ex}} 
+\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}}
+\newcommand{\HRule}{\rule{\textwidth}{0.1mm}} 		
+\usepackage{hyperref}
+					% horizontal line and its thickness
+
+
+\titleformat
+{\chapter} % command
+[hang] % shape
+{  \normalfont\bfseries\Huge} % format
+{} % label
+{0.5ex} % sep
+{
+%	\centering 
+} % before-code
+[] % after-code
+
+
+%nuevo comando
+
+\newcommand{\tb}[1]{\textcolor{blue}{#1}}
+\usepackage[english]{cleveref} %con este paquete si usas \cref{label} te pone automáticamente figura,ecuacion..
+
+\Crefname{figure}{Fig.}{Figs.}% {<type>}{<singular>}{<plural>}
+
+\newcommand{\refAnexo}[1]{(Anexo \ref{#1})}
+\newcommand{\refFigura}[1]{(Figura \ref{#1})}
+\newcommand{\refApartado}[1]{(Apartado \ref{#1})}
+\title{\textbf{Kit de desarrollo y validación de algoritmos de control de actitud para cuadricópteros}}
+
+\author{Miguel Fernández Cortizas}
+\date{}
+
+
+
+\newcommand{\grad}{$^{\circ}$}
+\usetikzlibrary{babel}
+\usepackage{tikz}
+\usetikzlibrary{matrix,chains,positioning,decorations.pathreplacing,arrows}
+
+\usepackage{pgfplots}
+\usepackage{ifthen}
+
+\usepackage{amsmath}
+\DeclareMathOperator{\sigm}{sigm}
+\newcommand{\diff}{\mathop{}\!\mathrm{d}}
+
+\usepackage{fancyhdr}
+
+\fancyhf{}
+\fancyhead[LE,RO]{\nouppercase{\rightmark}}
+\fancyfoot[LE,RO]{\thepage}
+%\fancyhead[LO,RE]{\nouppercase{\leftmark}}
+
+\fancypagestyle{plain}{%
+	\fancyhf{}% clears all header and footer fields
+	\fancyfoot[LE,RO]{\thepage}%
+	\renewcommand{\headrulewidth}{0pt}%
+	\renewcommand{\footrulewidth}{0.0pt}
+}
+
+     
+
+\newenvironment{dedication}
+{%\clearpage           % we want a new page          %% I commented this
+	\thispagestyle{empty}% no header and footer
+	\vspace*{\stretch{1}}% some space at the top
+	\itshape             % the text is in italics
+	\raggedleft          % flush to the right margin
+}
+{\par % end the paragraph
+	\vspace{\stretch{3}} % space at bottom is three times that at the top
+	\clearpage           % finish off the page
+}
+
+\begin{document}
+	
+	\pagestyle{empty}
+	\pagenumbering{gobble}
+	
+	\begin{landscape}
+	\includepdf[page=-,angle=90]{portada/PORTADA_Trabajo_Fin_de_Grado.pdf}
+	\end{landscape}
+	\clearpage\null\newpage
+
+	\input{portada/portada}
+	\input{portada/cita}
+	\justify
+	\pagestyle{empty}
+	\input{portada/agradecimientos.tex}
+	\pagestyle{empty}			
+	\input{abstract/abstract}
+	
+	\tableofcontents
+%	\cleardoublepage\null\newpage
+	
+	\pagestyle{fancy}
+	\justify
+	\pagenumbering{arabic}
+	\setcounter{page}{0}
+	\thispagestyle{empty}
+	
+	\input{capitulos/introduccion}
+	\input{capitulos/estadodelarte}
+	\input{capitulos/background}
+	\input{capitulos/hardware}
+	\input{capitulos/software}
+	\input{capitulos/metodologia}
+	\input{capitulos/experimentos}
+	\input{capitulos/discusion}
+	\input{capitulos/conclusiones}
+	\input{anexos/planificacion_ambiental.tex}
+	
+%	\pagenumbering{arabic}
+%	
+	\newpage
+	\listoffigures
+		\nocite{*}
+	\bibliographystyle{bibliografia/IEEEtran}
+	\bibliography{bibliografia/IEEEabrv,bibliografia/workBibliography}
+	
+\end{document}
