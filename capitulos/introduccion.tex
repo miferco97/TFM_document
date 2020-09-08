@@ -1,7 +1,38 @@
 \chapter{Introducción}
+\tb{cuidado con usar dron y uav, pueden ser los militares... }
+Los drones son vehículos no tripulados cuya popularidad en el mundo de la industria es cada vez mayor siendo utilizados para realizar tareas en campos muy diversos, como la inspección industrial, la industria cinematográfica o para su uso en operaciones de búsqueda y rescate. Dentro de este grupo los más empleados por la industria son los cuadricópteros, debido a la simplicidad de estos, lo que \tb{ reduce su peso y su coste}.
+
+La inmensa mayoría del uso de estas aeronaves es mediante teleoperación, dentro del paradigma de los RPAS (\textit{Remotely Piloted Aircraft System}) aunque el auge de estas aeronaves han llevado a la comunidad científica hacia el desarrollo de sistemas que permita a los cuadricópteros ser capaces de realizar tareas de forma autónoma.
+
+Una prueba de estos avances se pueden observar en diversas competiciones internacionales como IMAV, MBZIRC o más recientemente el AIRR. Competiciones en las que el objetivo es conseguir que UAV sean capaces de realizar pruebas complejas de forma autónoma.
+
+
+%Aunque se ha conseguido automatizar ciertas tareas, como el análisis topográfico con UAV.
 
 \section{Motivación}
 
+Las velocidades a las que suelen volar estos uav normalmente no suelen exceder los 3 m/s estándo la inmensa mayoría de ellas por debajo del 1.5 m/s. El aumentar la velocidad de vuelo, exige tener algoritmos de percepción y de estimación de estado más rápidos, así como algoritmos de planificación y de control más precisos.
+
+Además en la competición toda la computación se realiza a bordo de la aeronave en un SBC, por lo que la capacidad de cálculo es limitada.
+
+
 \section{Solución propuesta}
+
+En este trabajo se propone un sistema autónomo capaz de recorrer un circuito de carreras 
+simulado a altas velocidades de forma autónoma y con incertidumbre sobre el recorrido en sí.
+
+Para desarrollar los algoritmos se empleará el simulador fotorrealista FlightGoogles, empleado para las pruebas clasificatorias del AIRR 2019 como entorno de pruebas.
+
+
+
+%Este sistema estará formado por 3 partes principales:
+%\begin{itemize}
+%	\item \textbf{Estimación de estado:} Para poder recorrer el circuito es necesario tener una estimación precisa del estado de la aeronave a lo largo del tiempo. Para poder localizar el desarrollo de los 2 bloques posteriores se empleará la estimación provista por el simulador.
+%	\item \textbf{}
+%	\item \textbf{Generación de trayectorias:}
+%\end{itemize}
+
+
+
  
 \section{Objetivos}

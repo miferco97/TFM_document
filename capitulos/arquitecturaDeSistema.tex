@@ -1,0 +1,15 @@
+\chapter{Arquitectura del sistema}
+
+
+El objetivo de lograr que un cuadricóptero vuele a través de un circuito de carreras autónomamente requiere de la 
+
+\begin{itemize}
+	\item \textbf{Percepción:}
+	\item \textbf{Estimación de estado:}
+	\item \textbf{Generador de trayectorias:}
+	\item \textbf{Controlador:}
+\end{itemize}
+
+Para coordinar el trabajo de los distintos módulos que componen el sistema autónomo se ha empleado ROS (\textit{Robot Operating System}) \cite{ros} un \textit{framework} orientado a el desarrollo de software para robots ampliamente extendido en la comunidad robótica. Esto permite desarrollar cada componente del sistema de forma independiente y comunicarlos entre ellos mediante una interfaz común. Esto permite encapsular el código, lo que aumenta la reusabilidad y la robustez de cada módulo, independiente del resto de módulos que les rodeen.
+
+

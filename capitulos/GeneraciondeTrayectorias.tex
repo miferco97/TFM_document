@@ -1,0 +1,30 @@
+\chapter{Generación de trayectorias}
+
+En el apartado anterior se ha diseñado un controlador cuyo objetivo es seguir una trayectoria \tb{$x^{des}(t)$} minimizando el error de seguimiento. En este apartado se tratará sobre la forma en la que se generan estas trayectorias.\\
+
+El objetivo es generar trayectorias a través del circuito de forma que la aeronave sea capaz de recorrerlas teniendo en cuenta restricciones de posición, velocidad y aceleración.
+\tb{\Large control optimo antes ???} Se ha decidido usar trayectorias de tipo \textit{spline}, es decir, curvas diferenciables definidas en segmentos polinómicos. Cada trayectoria $r_d(t)$ está compuesta por $m$ segmentos de grado $q$, presentando la estructura
+
+\begin{equation}
+	r_d(t) = \left\{ 
+	\begin{array}{ll}
+		\sum_{i=1}^{q}a_{i1}t^{i} &,t_0\leq x \leq t_1 \\
+		\sum_{i=1}^{q}a_{i2}t^{i} &,t_1\leq x \leq t_2 \\
+		\qquad\vdots &\qquad\vdots \\
+		\sum_{i=1}^{q}a_{im}t^{i} &,t_{m-1}\leq x \leq t_m \\
+	\end{array}
+	\right.
+\end{equation}
+
+siendo $a_{ij}\in \mathbb{R}$ los coeficientes de los polinomios. El grado $q$ de estos polinomios dependerá del índice a minimizar durante el transcurso de la trayectoria, como se explicará en el apartado \ref{trajectoriasoptimas:cap}.
+
+
+
+\section{Trayectorias óptimas}\label{trajectoriasoptimas:cap}
+El objetivo del control óptimo es encontrar la función $x^*(t)$ que minimiza la expresión
+\begin{equation}
+	x^*(t) =  \underset{x(t)}{argmin}\int_{0}^{T}\mathcal{L}\left(x^{(n)},x^{(n-1)},...,\dot{x},x,t\right)\, dt
+\end{equation}
+siendo $\mathcal{L}$ el índice que se debe optimizar.
+
+
