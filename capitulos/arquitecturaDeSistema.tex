@@ -1,15 +1,30 @@
 \chapter{Arquitectura del sistema}
 
+Para conseguir que los distintos módulos que integran el sistema trabajen de forma conjunta es necesario establecer una arquitectura que permita la comunicación eficiente entre ellos así. Para coordinar el trabajo de los distintos módulos que componen el sistema se ha empleado ROS (\textit{Robot Operating System}) \cite{ros} un \textit{framework} orientado a el desarrollo de software para robots ampliamente extendido en la comunidad robótica. En el paradigma de ROS el código se estructura en nodos independientes que se comunican entre ellos a través de tópicos (mensajes que un nodo difunde de forma general a los demás nodos y cualquiera lo puede leer) y servicios (peticiones de un nodo particular a otro).
 
-El objetivo de lograr que un cuadricóptero vuele a través de un circuito de carreras autónomamente requiere de la 
+Esto permite desarrollar cada componente del sistema de forma independiente y comunicarlos entre ellos mediante una interfaz común. Esto permite encapsular el código, lo que aumenta la reusabilidad y la robustez de cada módulo, independiente del resto de módulos que les rodeen.
 
+A continuación se explicará más detalladamente los distintos nodos que componen la arquitectura:
 \begin{itemize}
-	\item \textbf{Percepción:}
-	\item \textbf{Estimación de estado:}
-	\item \textbf{Generador de trayectorias:}
-	\item \textbf{Controlador:}
+	
+	\item \textbf{Simulador:} En la arquitectura propuesta el entorno de simulación empleado, Flightgoogles, se comporta como un nodo adicional. Este nodo constituye el interfaz de comunicación entre la aeronave simulada y el entorno simulado,
+	el cual publica datos sobre el estado de la aeronave como su posición y orientación ,  las imágenes de las cámaras simuladas y la posición de las esquinas de las puertas en las imágenes obtenidas. Asimismo, recibe los comandos de control enviados a la aeronave.
+	 
+	\item \textbf{Estimación de estado.} Este modulo se encarga de completar la estimación de estado de la aeronave, empleando la información temporal sobre los cambios de pose de la aeronave. Además proporciona esta información a través de mensajes estándar al resto de los módulos de la arquitectura.
+	
+	\item \textbf{Percepción.} El simulador provee las imágenes, tomadas por las cámaras, del entorno simulado. En estas imágenes aparecen las puertas del circuitos con un indicador del número de puerta, así como las posiciones de las esquinas de las puertas en las imágenes tomadas. Conociendo los parámetros de la cámara y las dimensiones de las puertas se puede extrapolar la posición de las puertas respecto a la cámara. El modulo de percepción se encarga de enviar las posiciones aproximadas de las distintas puertas del circuito e ir actualizando estas estimaciones a medida que la aeronave avanza a través del circuito.
+	
+	\item \textbf{Generador de trayectorias.} Una vez conocida la posición de la aeronave en el circuito y las posiciones aproximadas de las puertas con respecto a la aeronave se genera la trayectoria que debe seguir la aeronave para pasar a través de las puertas de la forma más rápida posible sin colisionar con el entorno. Para poder actualizar la trayectoria de forma rápida con un coste bajo computacional se divide este trabajo en dos módulos:
+	
+	\begin{itemize}
+		\item \textbf{Trayectoria a largo plazo}: Obtiene las posiciones de las puertas provistas por el módulo de percepción y genera el recorrido tridimensional completo que debería realizar el cuadricóptero. 
+		
+		\item \textbf{Trayectoria a corto plazo}: Recibe la trayectoria a largo plazo y la evalúa en un corto horizonte temporal respecto a la posición actual de la aeronave. Dentro de este horizonte se genera la trayectoria de control óptima a seguir. Este módulo también se encarga de evaluar la trayectoria actual a lo largo del tiempo y enviar las consignas de posición, velocidad y aceleración al controlador.
+	\end{itemize}
+	
+	\item \textbf{Controlador:} El módulo del controlador recibe el estado actual de la aeronave provisto por el modulo de estimación y la referencias provistas por el módulo trayectoria a corto plazo. Con esto genera las acciones de control que se envían al módulo del simulador.
+	
 \end{itemize}
 
-Para coordinar el trabajo de los distintos módulos que componen el sistema autónomo se ha empleado ROS (\textit{Robot Operating System}) \cite{ros} un \textit{framework} orientado a el desarrollo de software para robots ampliamente extendido en la comunidad robótica. Esto permite desarrollar cada componente del sistema de forma independiente y comunicarlos entre ellos mediante una interfaz común. Esto permite encapsular el código, lo que aumenta la reusabilidad y la robustez de cada módulo, independiente del resto de módulos que les rodeen.
 
 

@@ -11,12 +11,14 @@ Una prueba de estos avances se pueden observar en diversas competiciones interna
 
 \section{Motivación}
 
-Las velocidades a las que suelen volar estos uav normalmente no suelen exceder los 3 m/s estándo la inmensa mayoría de ellas por debajo del 1.5 m/s. El aumentar la velocidad de vuelo, exige tener algoritmos de percepción y de estimación de estado más rápidos, así como algoritmos de planificación y de control más precisos.
+Las velocidades a las que suelen volar estos uav normalmente no suelen exceder los 3 m/s estando la inmensa mayoría de ellas por debajo del 1.5 m/s. El aumentar la velocidad de vuelo, exige tener algoritmos de percepción y de estimación de estado más precisos y rápidos, así como algoritmos de planificación y de control más rápidos y ligeros.
 
 Además en la competición toda la computación se realiza a bordo de la aeronave en un SBC, por lo que la capacidad de cálculo es limitada.
 
+Generar un sistema autonónomo desde cero presenta una gran complejidad lo que escaparía del alcance de este trabajo, es por eso que en este trabajo se han simplificado el desarrollo de los módulos de estimación de estado y de percepción del circuito, empleando datos provistos por el simulador que permiten que el trabajo se haya centrado en el módulo de control y de generación de trayectorias.
 
 \section{Solución propuesta}
+
 
 En este trabajo se propone un sistema autónomo capaz de recorrer un circuito de carreras 
 simulado a altas velocidades de forma autónoma y con incertidumbre sobre el recorrido en sí.
