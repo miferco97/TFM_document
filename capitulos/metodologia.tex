@@ -2,7 +2,15 @@
 	
 \tb{En los capítulos anteriores se ha presentado los distintos algoritmos de control y generación de trayectorias que se emplearñan para conseguir recorrer un circuito con un \tb{dron} de carreras autónomo }. En este apartado se presenta la metodología empleada para superar las pruebas clasificatorias del Alphapilot 2019 
 
-%\section{Sistemas de referencia}
+\section{Sistemas de referencia}
+Antes de continuar con la metodología empleada, es conveniente fijar los sistemas de referencia que se van a emplear. \tb{...}
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=0.75\textwidth]{imagenes/frames}
+	\caption{Transformaciones entre los sistemas de referencia de las puertas, el cuerpo de la aeronave y el mundo.}
+	\label{waypoints:Refs}
+\end{figure}
 
 
 
@@ -48,20 +56,59 @@ La incertidumbre de estas medidas disminuye a medida que el aeronave se acerca a
 
 \end{enumerate}
 
-Con este proceso se consigue obtener las posiciones estimadas de las, lo que constityen 
 
-\begin{figure}[htb!]
-	\centering
-	\includegraphics[width=0.75\textwidth]{imagenes/frames}
-	\caption{Transformaciones entre los sistemas de referencia de las puertas, el cuerpo de la aeronave y el mundo.}
-	\label{waypoints:Refs}
-\end{figure}
-
-
-
-
-
-
+Con este proceso se consiguen actualizar las posiciones estimadas de las puertas con una frecuencia aproximada de \tb{30 Hz}, la frecuencia de refresco de las cámaras. En los casos en los que se encuentran varias puertas en la imagen se realizan el filtrado anterior para cada una de ellas por separado.
 
 \section{Trayectorias a largo y corto plazo}
+
+Con la posición estimada de cada puerta en el mundo es posible construir la trayectoria que el dron debe seguir para completar el circuito. El problema es que estas posiciones cambian continuamente, siendo más fiables cuanto más cerca se encuentre el aeronave de la puerta, por lo que es necesario actualizar estas trayectorias de la forma mas ágil posible. Para conseguir que el sistema sea capaz de reaccionar de forma fluida a los cambios en la estimación de las puertas, se ha dividido la generación de trayectorias en dos partes : una a largo plazo que tiene en cuenta las posiciones de las puertas y una a corto plazo que genera trayectorias óptimas en un horizonte temporal finito.
+
+Dado que el circuito es amplio y no existen obstáculos entre dos puertas sucesivas, no se tienen en cuenta los obstáculos del circuito para la generación de trayectorias. Para asegurar esto, es necesario que las trayectorias generadas no se alejen demasiado de las lineas rectas que unen las distintas puertas sucesivas. A continuación, se explicará de forma más detallada cómo se generan estas trayectorias.
+\subsection{Trayectoria a largo plazo}
+
+Para poder generar trayectorias suaves a lo largo de todo el circuito es conveniente tener en cuenta las posiciones aproximadas de todas las puertas,  de esta forma a medida que el aeronave recorre la trayectoria obtiene nuevas estimaciones que permiten ir refinando la trayectoria. Si se generase la trayectoria solo teniendo en cuenta los $m$ siguientes waypoints, la trayectoria a seguir variaría mucho después de pasar una puerta, lo que perjudicaría en el rendimiento de la aeronave Dado que el dron obtiene nuevas mediciones a una frecuencia de unos \tb{30 Hz} esta trayectoria se tiene que ir actualizando continuamente, por lo que es conveniente minimizar el tiempo de cómputo de cada una. 
+
+Como se ha presentado en el capítulo \ref{cap:gen_tray} las trayectorias que se van a emplear son \textit{splines} en las que el grado de los segmentos polinómicos depende de la acción de control a minimizar. Los dos factores que afectan principalmente al tiempo de cómputo son el grado de los segmentos polinomiales, ya que a mayor grado, mayor número de coeficientes se deben calcular, y el número de \textit{waypoints}, ya que aumenta el número de segmentos polinomiales.
+
+Para poder generar una ruta a través de todo el circuito que se calcule de la forma más rápida posible y que tenga en cuenta las limitaciones físicas de la aeronave, se ha empleado trayectorias de aceleración mínima ($n = 2$) con 12 \textit{waypoints}, 11 de las puertas y 1 de la posición de la aeronave. Estas trayectorias son rápidas de calcular y permiten actualizar la trayectoria con una frecuencia superior a la de adquisición de la cámara. Estas trayectorias cambian continuamente, por lo que no es conveniente usar estas trayectorias para controlar el cuadricóptero ya que las referencias del controlador estarían cambiando continuamente, generando un movimiento muy poco fluido. Para solucionar esto se emplean las trayectorias a corto plazo.
+\tb{alguna imagen en rviz}
+\subsection{Trayectoria a corto plazo}
+
+Para generar la trayectoria que va a seguir el controlador, es conveniente generar trayectorias de \textit{snap} mínimo ($n=4$), ya que son las que generan trayectos más suaves. El grado de los polinomios que componen estas \textit{splines} son de grado 7, lo que implica un elevado coste computacional. Además, es conveniente que los \textit{waypoints} empleados para generar esta trayectoria estén cerca (una distancia inferior a los 8 m entre waypoints), ya que si se eligen waypoints muy separados, la trayectoria resultante puede separarse demasiado de la linea recta entre ellos, llegando a poder colisionar con el entorno. Por lo que para generar una trayectoria completa del circuito sería necesaria una gran cantidad de waypoints, por lo que el tiempo de cómputo sería muy elevado, haciendo que el sistema no sea capaz de reaccionar a cambios en las posiciones de las puertas de forma rápida.
+
+Para poder conseguir trayectorias de control óptimas se ha decidido partir de la trayectoria a largo plazo y establecer un horizonte temporal, sobre el cual se calcule la trayectoria a corto plazo. Este proceso se genera en varias etapas:
+\begin{enumerate}
+	\item Se localiza la posición del cuadricóptero dentro de la trayectoria a largo plazo. Para ello se parte de la última posición conocida de la aeronave en la trayectoria $t_c$ y se comprueba en un pequeño intervalo, en que posición se encuentra la aeronave. Dado que el sistema tiene inercia y los algoritmos tardan un tiempo en procesarse, es necesario recalcular esta posición para obtener una mayor precisión.
+	
+	\item Se muestrea la trayectoria a largo plazo para obtener los waypoints de la trayectoria a corto plazo. Partiendo de la posición obtenida previamente $t_c$, se fija un horizonte temporal en el que se quiere calcular la trayectoria a corto plazo $t_h$, también se fija la distancia a la que se quiere que se encuentren los waypoints $t_d$. Con estos datos se  muestrea la trayectoria en el intervalo $t \in (t_c, t_c + t_h)$ con una distancia de muestreo $t_d$ entre muestras. Las muestras obtenidas constituyen el conjunto de \textit{waypoints} que se emplearán para generar la trayectoria a corto plazo.
+	
+	\item Finalmente, se genera una trayectoria de \textit{snap} mínimo empleando el conjunto de waypoints obtenidos previamente. La trayectoria obtenida $P(t) :[0,t_f] \rightarrow \mathbb{R}^3$ proporciona las posiciones en el espacio tridimensional en las que deberá estar el cuadricóptero para cada instante de tiempo. Para generar las consignas del controlador es conveniente conocer también las velocidades y acceleraciones para cada instante de tiempo, por lo que se derivan estos splines para obtener la trayectoria en velocidad $V(t) :[0,t_f] \rightarrow \mathbb{R}^3$ y la trayectoria en acceleración  $A(t) :[0,t_f] \rightarrow \mathbb{R}^3$ siendo $t_f$ el tiempo de finalización de la trayectoria.
+\end{enumerate}
+
+Para conseguir que estas trayectorias tengan en cuenta los cambios $P(t)$, $V(t)$ y $A(t)$ en la estimación de las puertas, estas trayectorias se recalculan periódicamente a medida que se modifica la trayectoria a largo plazo.
+
+\subsection{Orientación de la aeronave en \textit{yaw}}
+Además de las referencias de posición en el espacio tridimensional, para controlar el estado de la aeronave es necesario indicar el angulo de \textit{yaw} deseado. De cara a obtener las mejores estimaciones en las posiciones de las puertas, se desea que la aeronave siempre este orientada de forma que las camáras miren hacia delante. Partiendo de la trayectoria a corto plazo $V(t)$ es facil obtener el valor requerido del angulo de \textit{yaw} $\psi$. Siendo $v_x(t)$ y $v_y(t)$ las componentes de la trayectoria $V(t)$ para el eje x y el eje y respectivamente, en ángulo de yaw deseado es:
+
+\begin{equation}
+	\psi_{des}(t) = -atan2(v_x,v_y) + \pi/2
+\end{equation}
+siendo $atan2(x,y)$ el arco tangente de dos parámetros entre $x$ e $y$. Con esta simple expresión se consigue que la aeronave se oriente de forma que las cámaras miren hacia donde se va a mover la aeronave.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
