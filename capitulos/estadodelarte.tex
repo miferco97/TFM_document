@@ -1,3 +1,31 @@
 \chapter{Estado del arte}
 
+Para contextualizar el trabajo desarrollado dentro del campo de las carreras de drones autónomos es necesario conocer los avances obtenidos por la comunidad robótica. Debido a que los contenidos del trabajo se han enfocado, principalmente, en torno al controlador y a la generación de trayectorias se ha profundizado en el estado del arte de estos campos enfocados a los drones de carreras. Adicionalmente, debido al objetivo del trabajo de generar un sistema coordinado, también se ha revisado el trabajo realizado por los finalistas de las carreras de drones autónomos más importantes.
+
+\section{Control y generación de trayectorias}
+
+En la primera década de los 2000, la mayoría del trabajo realizado con multirrotores empleaba controladores linealizados en torno al punto de equilibrio (\textit{hover}), los cuales, unicamente garantizan la estabilidad de la aeronave para pequeños ángulos de \textit{pitch} y \textit{roll} \cite{hoffmann2008quadrotor}. En cuanto a las trayectorias generadas, la mayoría de ellas son trayectorias polinómicas del tipo \textit{spline}, generadas interpolando una función entorno a los puntos de paso deseados \cite{vanek2005}\cite{barrientos2009}.
+
+En 2008 V. Raffo et al. \cite{MPCRaffo2008} emplearon una estructura de control basada en un controlador predictivo basado en el modelo (MPC) que se encargaba de seguir la trayectoria y un controlador $\mathcal{H}_\infty$ que controlaba la rotación de la aeronave. Con esta estructura son capaces de seguir trayectorias sencillas de forma robusta ante perturbaciones.
+
+En 2010, Guillula et al. \cite{gillula2010design} diseñaron un controlador capaz de realizar maniobras acrobáticas, como una voltereta hacia atrás, con un cuadricóptero de forma segura. Para ello emplearon un \textit{framework} para el diseño de regiones de cambio seguras, en las que cada región presenta un modelo dinámico distinto. Sin embargo, estas maniobras se generan de forma discontinua, necesitando analizar cada parte de la trayectoria de forma independiente y generar situaciones de cambio entre estos modos de forma segura. 
+
+En 2011, Mellinger et al. \cite{MinimunSnap2011} presentan un controlador para cuadricópteros que permite realizar maniobras agresivas en un espacio tridimensional de forma continua. Este controlador no está linealizado en torno a ningún punto de funcionamiento, por lo que permite seguir trayectorias agresivas con un bajo error de seguimiento aunque el aeronave tenga ángulos grandes de \textit{roll} y \textit{pitch}. Este es uno de los controladores más usados actualmente debido al rendimiento que consigue con un algoritmo sencillo y con un bajo coste computacional.
+
+En 2012, Mallikarjunan et al. \cite{mallikarjunan2012l1} diseñaron un controlador de actitud adaptativo, aplicando control $\mathcal{L}_1$, capaz de seguir trayectorias de forma precisa y robusta, con presencia de incertidumbres en el modelo de la aeronave y de las perturbaciones del entorno.
+
+En 2016, Kamel et al. \cite{KamelMPC2016} comparan el rendimiento de dos MPCs, uno lineal y uno no lineal, en el seguimiento de trayectorias agresivas con un cuadricóptero. En estos experimentos observaron que, aunque ambos controladores eran capaces de seguir las trayectorias de forma satisfactoria, el controlador no lineal, conseguía un rendimiento ligeramente superior.
+
+En 2017, Faessler et al. \cite{Faessler17ral} emplearon control LQR considerando tanto la dinámica del cuadricóptero, como la dinámica aislada de cada rotor. Además, consideran los limites de los rotores para priorizar la saturación de aquellas entradas que son relevantes para la estabilización del cuadricóptero. Asimismo, en 2018 \cite{Faessler18ral}, refinaron el controllador de Mellinger et al. considerando el arrastre (\textit{drag}) de los rotores dentro del modelo dinámico del cuadricóptero, en lugar de considerarlo como una perturbación externa desconocida, consiguiendo una ligera mejora en el seguimiento de trayectorias a alta velocidad.
+ 
+En 2018, Falanga et al. \cite{falanga2018pampc} presentan un controlador MPC consciente de la percepción, el cual unifica el control y la planificación para satisfacer objetivos de acción y percepción de forma simultánea. Las trayectorias generadas por el MPC deben tener en cuenta ambos objetivos, para conseguir realizar maniobras complicadas mientras maximizan la visibilidad de puntos de interés por la aeronave.
+
+
+\section{Carreras de drones autónomos}
+Ganaron la competición IROS 2018 Autonomous Drone Race \cite{BeautyAndTheBeast}.
+
+Recientemente \cite{foehn2020alphapilot}
+
+
+
 

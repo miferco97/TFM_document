@@ -8,7 +8,7 @@ A continuación se explicará más detalladamente los distintos nodos que compon
 \begin{itemize}
 	
 	\item \textbf{Simulador:} En la arquitectura propuesta el entorno de simulación empleado, Flightgoogles, se comporta como un nodo adicional. Este nodo constituye el interfaz de comunicación entre la aeronave simulada y el entorno simulado,
-	el cual publica datos sobre el estado de la aeronave como su posición y orientación ,  las imágenes de las cámaras simuladas y la posición de las esquinas de las puertas en las imágenes obtenidas. Asimismo, recibe los comandos de control enviados a la aeronave.
+	el cual publica datos sobre el estado de la aeronave como su posición y orientación, las imágenes de las cámaras simuladas y la posición de las esquinas de las puertas en las imágenes obtenidas. Asimismo, recibe los comandos de control enviados a la aeronave.
 	 
 	\item \textbf{Estimación de estado.} Este modulo se encarga de completar la estimación de estado de la aeronave, empleando la información temporal sobre los cambios de pose de la aeronave. Además proporciona esta información a través de mensajes estándar al resto de los módulos de la arquitectura.
 	

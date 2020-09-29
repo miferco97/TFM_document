@@ -1,34 +1,37 @@
 \chapter{Introducción}
-\tb{cuidado con usar dron y uav, pueden ser los militares... }
-Los drones son vehículos no tripulados cuya popularidad en el mundo de la industria es cada vez mayor siendo utilizados para realizar tareas en campos muy diversos, como la inspección industrial, la industria cinematográfica o para su uso en operaciones de búsqueda y rescate. Dentro de este grupo los más empleados por la industria son los cuadricópteros, debido a la simplicidad de estos, lo que \tb{ reduce su peso y su coste}.
-
-La inmensa mayoría del uso de estas aeronaves es mediante teleoperación, dentro del paradigma de los RPAS (\textit{Remotely Piloted Aircraft System}) aunque el auge de estas aeronaves han llevado a la comunidad científica hacia el desarrollo de sistemas que permita a los cuadricópteros ser capaces de realizar tareas de forma autónoma.
-
-Una prueba de estos avances se pueden observar en diversas competiciones internacionales como IMAV, MBZIRC o más recientemente el \tb{AIRR}. Competiciones en las que el objetivo es conseguir que UAV sean capaces de realizar pruebas complejas de forma autónoma.
 
 
-%Aunque se ha conseguido automatizar ciertas tareas, como el análisis topográfico con UAV.
+El auge de los pequeños multirrotores no tripulados (comúnmente llamados drones) en diversos ámbitos ha crecido de forma exponencial durante estos últimos años. Se puede observar la presencia de estos drones en diversos ámbitos como: el industrial, para realizar inspecciones en lugares de difícil acceso o en lugares peligrosos, el cinematográfico, para grabar escenas aéreas, o para dispositivos de búsqueda y rescate, en los que se emplean para poder barrer grandes áreas en búsqueda de personas desaparecidas, entre otros. Además, dentro del mundo del entretenimiento las carreras de drones comienzan a hacerse un hueco en países como los Estados Unidos, donde las carreras de drones son un deporte que se retransmite en algunos canales de televisión. 
 
-Dentro de estas competiciones, el Alphapilot 
+Actualmente, en la mayoría de estas competiciones, los drones están pilotados por un humano, aunque recientemente, empiezan a aparecer carreras de drones autónomos, en los que las aeronaves tienen que recorrer el circuito entero de forma autónoma sin la intervención de un humano. Algunos ejemplos de estas competiciones serían: la \textit{IROS Autonomous Drone Race}, que se celebra anualmente dentro de la conferencia de robótica internacional  IROS, o más recientemente AlphaPilot, una carrera de drones autónomos organizada por la \textit{Drone Racing League} y la empresa \textit{Lockheed Martin} con un gran premio de 1 millón de dólares para el ganador.
 
-% Hablar de  lo relevantes que son las carreras de drones
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=0.80\textwidth]{imagenes/foehnAlphaPilot}
+	\caption{Cuadricóptero empleado en el AlphaPilot 2019, mirando hacia la primera puerta del circuito \cite{foehn2020alphapilot}}
+	\label{}
+\end{figure}
+
+
+Actualmente, el rendimiento obtenido por los drones de carreras autónomos aún están lejos de alcanzar el de los pilotos humanos, es por esto que el afán por superar el nivel de los pilotos humanos es una motivación para los grupos de investigación por todo el mundo. El desarrollo de drones autónomos es un campo de estudio exigente que involucra el desarrollo de la tecnología existente en diversos campos de la robótica como: la estimación, el control, la generación de trayectorias o la percepción, entre otros. 
 
 \section{Motivación}
 
-Las velocidades a las que suelen volar estos uav normalmente no suelen exceder los 3 m/s estando la inmensa mayoría de ellas por debajo del 1.5 m/s. El aumentar la velocidad de vuelo, exige tener algoritmos de percepción y de estimación de estado más precisos y rápidos, así como algoritmos de planificación y de control más rápidos y ligeros.
+El desarrollo de un sistema capaz de recorrer un circuito de forma autónoma sin interacción externa con cierta incertidumbre sobre el entorno, es un problema apasionante debido a las elevadas velocidades de vuelo y la limitada capacidad computacional, que exigen tener algoritmos de percepción y de estimación de estado más precisos y rápidos, así como algoritmos de planificación y de control más rápidos y ligeros, que permitan realizar cálculos a tiempo real.
 
-Además en la competición toda la computación se realiza a bordo de la aeronave en un SBC, por lo que la capacidad de cálculo es limitada.
+Los avances obtenidos en diversos campos de la robótica durante el desarrollo de estos drones autónomos de carreras se pueden extrapolar para mejorar el rendimiento de los drones autónomos empleados para realizar distintas tareas con una mayor relevancia como pueden ser la aplicaciones industriales o como aquellas relacionadas con la búsqueda y rescate.
 
-Generar un sistema autonónomo desde cero presenta una gran complejidad lo que escaparía del alcance de este trabajo, es por eso que en este trabajo se han simplificado el desarrollo de los módulos de estimación de estado y de percepción del circuito, empleando datos provistos por el simulador que permiten que el trabajo se haya centrado en el módulo de control y de generación de trayectorias.
+Los últimos avances en las plataformas de simulación enfocadas al desarrollo de sistemas de control de drones autónomos, como el simulador fotorrealista FlightGoggles desarrollado por Guerra et al \cite{guerra2019flightgoggles} empleado durante las pruebas clasificatorias del AlhpaPilot 2019, permiten probar el rendimiento de un sistema autónomo de forma realista y segura.
+
+
 
 \section{Solución propuesta}
+El objetivo propuesto consiste en diseñar una arquitectura de un sistema modular capaz de controlar un cuadrirrotor a través de un circuito de carreras de forma autónoma.
 
+Debido a la gran complejidad que presenta el desarrollo completo de todos los módulos que intervienen en un dron de carreras autónomo, se han simplificado el desarrollo de los módulos de estimación de estado y de percepción del circuito, empleando datos provistos por el simulador. Es por esto que el trabajo se haya centrado en el desarrollo de la arquitectura del sistema y del desarrollo de los módulos de control y generación de trayectorias capaces de generar y seguir trayectorias agresivas a lo largo de todo el circuito un circuito de carreras 
+simulado a altas velocidades con incertidumbre sobre el recorrido en sí.
 
-En este trabajo se propone un sistema autónomo capaz de recorrer un circuito de carreras 
-simulado a altas velocidades de forma autónoma y con incertidumbre sobre el recorrido en sí.
-
-Para desarrollar los algoritmos se empleará el simulador fotorrealista FlightGoogles, empleado para las pruebas clasificatorias del AIRR 2019 como entorno de pruebas.
-
+Para desarrollar los algoritmos y comparar el rendimiento del sistema realizado, se ha empleado el simulador FlightGoogles, empleado para las pruebas clasificatorias del AlphaPilot 2019 como entorno de pruebas.
 
 
 %Este sistema estará formado por 3 partes principales:
@@ -40,5 +43,27 @@ Para desarrollar los algoritmos se empleará el simulador fotorrealista FlightGo
 
 
 
- 
+ \newpage
 \section{Objetivos}
+
+\tb{completar objetivos}
+Para poder llevar a cabo el desarrollo del trabajo de forma adecuada es conveniente desgranar los objetivos principales en tareas de alcance más reducido:
+
+\begin{itemize}
+	\item \textbf{Modulo de control}	
+	\begin{itemize}
+		\item Estudio del estado del arte acerca de los algoritmos de control más relevantes en las carreras de drones .
+	\end{itemize}
+
+	\item \textbf{Generación de trayectorias}	
+	\begin{itemize}
+		\item Estudio del estado del arte acerca de los métodos de generación de trayectorias más empleados.
+	\end{itemize}
+
+	\item \textbf{Arquitectura del sistema}	
+	\begin{itemize}
+		\item Estudio de las arquitecturas empleadas por los ganadores de las diversas competiciones de drones autónomos .
+	\end{itemize}
+	
+	
+\end{itemize}
