@@ -28,8 +28,11 @@ Los últimos avances en las plataformas de simulación enfocadas al desarrollo d
 \section{Solución propuesta}
 El objetivo propuesto consiste en diseñar una arquitectura de un sistema modular capaz de controlar un cuadrirrotor a través de un circuito de carreras de forma autónoma.
 
-Debido a la gran complejidad que presenta el desarrollo completo de todos los módulos que intervienen en un dron de carreras autónomo, se han simplificado el desarrollo de los módulos de estimación de estado y de percepción del circuito, empleando datos provistos por el simulador. Es por esto que el trabajo se haya centrado en el desarrollo de la arquitectura del sistema y del desarrollo de los módulos de control y generación de trayectorias capaces de generar y seguir trayectorias agresivas a lo largo de todo el circuito un circuito de carreras 
-simulado a altas velocidades con incertidumbre sobre el recorrido en sí.
+Debido a la gran complejidad que presenta el desarrollo completo de todos los módulos que intervienen en un dron de carreras autónomo, se han simplificado el desarrollo de los módulos de estimación de estado y de percepción del circuito, empleando datos provistos por el simulador. Es por esto que el trabajo se haya centrado en el desarrollo de la arquitectura del sistema y del desarrollo de los módulos de control y generación de trayectorias capaces de generar y seguir trayectorias agresivas a lo largo de todo el circuito un circuito de carreras simulado a altas velocidades con incertidumbre sobre el recorrido en sí.
+
+Para el algoritmo de control se han implementado dos controladores del estado del arte, un controlador para orientaciones de la aeronave con ángulos pequeños y otro para grandes ángulos, y se ha comparado el rendimiento de ambos en el seguimiento de diversas trayectorias.
+
+En cuanto a la generación de trayectorias, se ha optado por generar trayectorias polinómicas óptimas de tipo \textit{spline}. Para poder mejorar la capacidad de reacción del aeronave ante cambios en el circuito se ha dividido la  generación de trayectorias en dos partes: la generación de una trayectoria completa a través de todo el circuito (largo plazo) y la generación de una trajectoria corta entorno a un horizonte temporal próximo a la posición del aeronave (corto plazo).
 
 Para desarrollar los algoritmos y comparar el rendimiento del sistema realizado, se ha empleado el simulador FlightGoogles, empleado para las pruebas clasificatorias del AlphaPilot 2019 como entorno de pruebas.
 
@@ -41,9 +44,6 @@ Para desarrollar los algoritmos y comparar el rendimiento del sistema realizado,
 %	\item \textbf{Generación de trayectorias:}
 %\end{itemize}
 
-
-
- \newpage
 \section{Objetivos}
 
 \tb{completar objetivos}

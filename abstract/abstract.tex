@@ -1,45 +1,39 @@
 \chapter*{Resumen ejecutivo}
 \section*{Introducción}
 
-\tb{cuidado con usar dron y uav, pueden ser los militares... }
-Los drones son vehículos no tripulados cuya popularidad en el mundo de la industria es cada vez mayor siendo utilizados para realizar tareas en campos muy diversos, como la inspección industrial, la industria cinematográfica o para su uso en operaciones de búsqueda y rescate. Dentro de este grupo los más empleados por la industria son los cuadricópteros, debido a la simplicidad de estos, lo que \tb{ reduce su peso y su coste}.
+Los pequeños multirrotores no tripulados (comúnmente llamados drones) son vehículos cuya popularidad en el mundo de la industria es cada vez mayor siendo utilizados para realizar tareas en campos muy diversos, como la inspección industrial, la industria cinematográfica o para su uso en operaciones de búsqueda y rescate. Aunque la inmensa mayoría del uso de estas aeronaves es mediante teleoperación, el auge de estas aeronaves han llevado a la comunidad robótica hacia el desarrollo de sistemas capaces de realizar tareas de forma autónoma.
 
-La inmensa mayoría del uso de estas aeronaves es mediante teleoperación, dentro del paradigma de los RPAS (\textit{Remotely Piloted Aircraft System}) aunque el auge de estas aeronaves han llevado a la comunidad científica hacia el desarrollo de sistemas que permita a los cuadricópteros ser capaces de realizar tareas de forma autónoma.
+Con el ánimo de impulsar el desarrollo de las tecnologías necesarias para conseguir mejorar la autonomía de estos drones, existen diversas competiciones internacionales como el IARC (International Aerial Robotics Competition), IMAV (International Micro Air Vehicle Competition) o MBZIRC (Mohamed Bin Zayed International Robotics Challenge), en las que el objetivo es conseguir que las aeronaves sean capaces de realizar pruebas complejas de forma autónoma. 
 
-Una prueba de estos avances se pueden observar en diversas competiciones internacionales como IMAV, IARC, IROS Autonomous drone challenge o más recientemente el \tb{AIRR}. Competiciones en las que el objetivo es conseguir que UAV sean capaces de realizar pruebas complejas de forma autónoma.
-
-
-%Aunque se ha conseguido automatizar ciertas tareas, como el análisis topográfico con UAV.
-
-Dentro de estas competiciones, el Alphapilot 
-
-% Hablar de  lo relevantes que son las carreras de drones
-
-
-
-
+Dentro de estás competiciones internacionales, existen las carreras de drones autónomos, como AlphaPilot , en las que el objetivo es que un dron sea capaz de recorrer un circuito de forma autónoma en el menor tiempo posible.
 
 \section*{Alcance}
-
-Los objetivos de este trabajo consisten en diseñar un controlador capaz de permitir que un cuadricóptero sea capaz de volar a muy altas velocidades, superiores a 5 m/s, a través de un circuito de carreras para drones, así como generar las trayectorias que el dron debe seguir para recorrer el circuito de forma óptima.
-
+Los objetivos de este trabajo consisten en diseñar un sistema autonómo, para que un cuadricóptero sea capaz de recorrer un circuito de carreras de forma satisfactoria y en diseñar un controlador capaz de permitir que un cuadricóptero vuele a altas velocidades a través de un circuito, así como generar las trayectorias que el aeronave debe seguir para recorrer el circuito de forma óptima. Adicionalmente, los algoritmos están diseñados para ser ejecutados en un ordenador a bordo, por lo que se deben optimizar para obtener el mayor rendimiento.
+El desarrollo y validación del trabajo se realizará el simulador y las reglas empleadas en la prueba virtual clasificatoria del AlphaPilot2019.
 \section*{Solución realizada}
-
 \begin{itemize}
-	\item \textbf{Controlador pequeños ángulos:}
-	\item \textbf{Controlador grandes ángulos:}
-	\item \textbf{Generador de trayectorias óptimas en acceleracion:}
-	\item \textbf{Generador de trayectorias óptimas en \textit{snap}:}
+\item \textbf{Controlador:}
+Para conseguir que el cuadricóptero recorra el circuito a altas velocidades se han implementado dos controladores, uno linealizado en torno al punto de equilibrio, en los que la orientación del cuadricóptero varía un pequeño angulo respecto al estado de hover y otro para cuando esta variación es de un gran ańgulo.
+
+\item \textbf{Generación de trayectorias:} Se ha dividido la generación de trayectorias en dos partes:
+Una trayectoria que abarca todo el recorrido del circuito y otra más corta dentro de un horizonte temporal próximo a la posición del cuadricóptero. Ambas son trayectorias óptimas, generadas por una \textit{spline}.
+
+\item \textbf{Arquitectura del sistema:} Los algoritmos de control y generación de trayectorias se han integrado dentro de una arquitectura modular empleando el \textit{framework} de robótica ROS. Adicionalmente se han desarrollado módulos de percepción y estimación de estado empleando datos provistos por el simulador.
+
 \end{itemize}
+	
 
 \section*{Experimentación y resultados.}
 
-Para la simulación se ha empleado el entorno de simulación Flightgoogles \tb{citar}  el cual fue el empleado para las pruebas clasificatorias virtuales del Alphapilot 2019.
+Para realizar los experimentos se ha empleado el entorno de simulación Flightgoogles \tb{citar}  el cual fue el empleado para las pruebas clasificatorias virtuales del Alphapilot 2019. Durante el transcurso del trabajo se han realizado experimentos para la evaluación de los controladores implementados, en los que se prueba el rendimiento de los mismos recorriendo trayectorias sencillas a distintas velocidades. Asimismo, se han realizado experimentos recorriendo el circuito de carreras entero, en los que se prueba el rendimiento del generador de trayectorias y de la arquitectura diseñada.
 
+En estos experimentos se puede observar como el controlador para grandes ángulos es capaz de alcanzar velocidades más altas (\tb{hasta 15 m/s}) con un menor error de seguimiento que el controlador linealizado. La arquitectura presentada es capaz de recorrer el circuito entero de forma satisfactoria en 32s, posicionándose entre los 3 mejores resultados obtenidos por los equipos participantes en las clasificatorias del AlphaPilot2019 \tb{cite filght googles paper}\footnote{Estos resultados fueron presentados en el Workshop  \textit{Perception and Control for Fast and Agile Super-Vehicles} de la conferencia RSS20, integrando los módulos de percepción y estimación de estados desarrollados por Carlos Redondo Plaza}.
 
 
 \section*{Conclusiones y trabajo futuro}
 
+Se ha conseguido desarrollar sistema capaz 
+\newpage
 \section*{Palabras clave}
 UAV, cuadricóptero, control clásico, aprendizaje automático, inteligencia artificial, aprendizaje por refuerzo, redes neuronales.
 
