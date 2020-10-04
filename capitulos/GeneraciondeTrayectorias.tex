@@ -1,6 +1,6 @@
 \chapter{Generación de trayectorias}\label{cap:gen_tray}
 
-En el apartado anterior se ha diseñado un controlador cuyo objetivo es seguir una trayectoria \tb{$x^{des}(t)$} minimizando el error de seguimiento. En este apartado se tratará sobre la forma en la que se generan estas trayectorias. Este desarrollo se realiza entorno a una trayectoria unidimensional en un único eje de desplazamiento , el eje $x$. Este desarrollo es ampliable al espacio tridimensional realizando una trayectoria por cada eje.
+En el apartado anterior se ha diseñado un controlador cuyo objetivo es seguir una trayectoria deseada minimizando el error de seguimiento. En este apartado se tratará sobre la forma en la que se generan estas trayectorias. Este desarrollo se realiza entorno a una trayectoria unidimensional en un único eje de desplazamiento , el eje $x$. Este desarrollo es ampliable al espacio tridimensional realizando una trayectoria por cada eje.
 
 
 \section{Trayectorias óptimas}\label{trajectoriasoptimas:cap}
@@ -47,7 +47,7 @@ Con estas condiciones de contorno se calcula la trayectoria óptima para pasar d
 \section{Trayectorias continuas a trozos}
 Para generar trayectorias que el cuadricóptero deba seguir para completar el circuito es conveniente contar con puntos de paso (\textit{waypoints}) por los que se quiere que pase la aeronave, por ejemplo, el centro de las puertas.
 
-\tb{\large dibujito guachi}
+\tb{\large Añadir diagrama}
 
 Como se puede observar en el apartado anterior, las trayectorias que se generan entre dos puntos de paso $a$ y $b$, son trayectorias polinómicas cuyo grado depende del orden de la derivada de la acción de control. Debido a esto, se ha decidido usar trayectorias de tipo \textit{spline}, es decir, curvas diferenciables definidas en segmentos polinómicos, donde cada segmento sería una trayectoria entre dos \textit{waypoints}. Cada trayectoria completa, $r_d(t)$ está compuesta por $m$ segmentos de grado $q$, presentando la estructura
 
@@ -103,5 +103,5 @@ Para tener aumentar el control sobre la agresividad de la trayectoria se puede a
 
 Valores de $\alpha_i$ pequeños generan trayectorias más agresivas, así como valores más grandes producen trayectorias más seguras. Iterando el valor de este parámetro $\alpha_i$ se controla que las limitaciones en velocidad y aceleración máxima se cumplan para cada segmento $S_i$.
 
-Esta es una forma simple y rápida de establecer los distintos segmentos temporales, sin embargo, es una aproximación que afecta a la generación de la trayectoria óptima, haciendo que el tiempo total que se tarda en recorrer el circuito sea mayor que el que se podría obtener usando otros métodos de optimización como los propuestos por \tb{añadir citaciones} para la obtención de estos segmentos temporales. A pesar de esto, debido a que las posiciones de los \textit{waypoints} cambian rápidamente a lo largo del circuito y se deben recalcular las trayectorias continuamente, el bajo coste computacional que presenta este método hace que merezca la pena su utilización.
+Esta es una forma simple y rápida de establecer los distintos segmentos temporales, sin embargo, es una aproximación que afecta a la generación de la trayectoria óptima, haciendo que el tiempo total que se tarda en recorrer el circuito sea mayor que el que se podría obtener usando otros métodos de optimización como los propuestos por Mellinger et al. \cite{MinimunSnap2011} o por Foehn. et al. \cite{foehn2020cpc}  para la obtención de estos segmentos temporales. A pesar de esto, debido a que las posiciones de los \textit{waypoints} cambian rápidamente a lo largo del circuito y se deben recalcular las trayectorias continuamente, el bajo coste computacional que presenta este método hace que merezca la pena su utilización.
 

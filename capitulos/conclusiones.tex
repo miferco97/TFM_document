@@ -1,5 +1,32 @@
 \chapter{Conclusiones y trabajo futuro}
-Durante el transcurso de este trabajo se ha desarrollado la arquitectura para un cuadricóptero de carreras autónomo junto con el desarrollo de los módulos de control y generación de trayectorias implicados. Asimismo, se han validado los desarrollos e implementaciones realizadas en un entorno de simulación fotorrealista. A continuación se tratará sobre las conclusiones que se han extraído durante el transcurso de este trabajo, así como las posibles líneas de mejora que se podrían aplicar en un trabajo futuro.
+
 \section{Conclusiones}
 
+Durante el transcurso de este trabajo se ha desarrollado la arquitectura modular para un cuadricóptero de carreras autónomo. Esta modularidad de la arquitectura ha facilitado el desarrollo de los algoritmos de forma aislada así como el desarrollo de los experimentos de control, en los que se ha podido intercambiar los módulos de generación de trayectorias por módulos más sencillos de forma ágil. Esta modularidad también permitiría sustituir el módulo del simulador por un módulo de interfaz con una plataforma real, lo que facilitaría la realización de experimentos en real.
+
+En cuanto al control del cuadricóptero se han conseguido implementar dos controladores del estado del arte de forma satisfactoria adaptándolos a las señales de control requeridas por el cuadricóptero. El empleo de herramientas como el \textit{dynamic reconfigure} de ROS han permitido realizar el ajuste de las ganancias de los controladores \textit{online}, lo que ha reducido considerablemente los tiempos necesarios para realizar estos ajustes.
+
+Por otro lado, la decisión de separar la generación de trayectorias en dos partes, una a largo plazo y otra a largo plazo, ha permitido generar trayectorias de control óptimas en \textit{snap} con una alta reactividad frente a los cambios en las estimaciones de las puertas, manteniendo un bajo coste computacional en la generación de ambas trayectorias.
+
+Finalmente, se han validado los desarrollos e implementaciones realizados en un entorno de simulación fotorrealista, consiguiendo completar el circuito de carreras completo de forma satisfactoria con una velocidad máxima de vuelo de 10,5 m/s en un tiempo inferior a los 23 segundos, lo que se situaría dentro de los mejores obtenidos el año pasado durante las clasificatorias virtuales del AlphaPilot2019.
+
+
+
 \section{Trabajo futuro}
+
+El trabajo realizado deja una arquitectura modular que permite su ampliación con nuevos módulos para adecuarla a la realización de distintas tareas de forma sencilla. Para una utilización del sistema en un caso real sería necesario implementar los módulos de estimación y percepción del entorno de una forma integral, empleando únicamente las medidas obtenidas por los sensores de la aeronave. 
+
+Para mejorar el comportamiento del controlador sería conveniente emplear un controlador predictivo basado en el modelo (MPC), que permitiría reducir el error de seguimiento suavizando las acciones bruscas realizadas por el controlador cuando sufre cambios en la trayectoria de referencia. Junto con este controlador, se podrían emplear algoritmos de auto-identificación que permitan estimar \textit{online} el valor de los parámetros dinámicos de la aeronave, así como identificar posibles perturbaciones presentes en el entorno como podría ser el viento.
+
+Finalmente, se podrían implementar métodos de optimización para calcular trayectorias que tengan en cuenta restricciones espaciales, lo que permitiría su empleo en entornos complicados con obstáculos alrededor. 
+
+
+
+
+
+
+
+
+
+
+

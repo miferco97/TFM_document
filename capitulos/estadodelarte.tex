@@ -22,9 +22,26 @@ En 2018, Falanga et al. \cite{falanga2018pampc} presentan un controlador MPC con
 
 
 \section{Carreras de drones autónomos}
-Ganaron la competición IROS 2018 Autonomous Drone Race \cite{BeautyAndTheBeast}.
+En 2016 se inauguró la primera competición de drones de carreras autónomos (ADR) en el marco de conferencia internacional de robótica IROS (\textit{Intelligent Robots and Systems}). En este año Jung et al.\cite{iros2016} fueron capaces de completar todo el circuito obteniendo el primer puesto en la clasificación. Para ello emplearon un \textit{framework} basado en IBVS (Image Based Visual Servoing) con el que primero estimaban las posiciones de los obstáculos empleando cámaras estéreo, para posteriormente cerrar el bucle de control emplando la posicion relativa del centro de las puertas en la imagen. 
 
-Recientemente \cite{foehn2020alphapilot}
+Los ganadores del ADR 2017 Moon et al. \cite{moon2019challenges} emplearon un algoritmo de SLAM monocular con el cual estimaban la posición de las puertas, para posteriormente acercarse al centro de la siguiente puerta empleando un regulador PID para controlar la altura y la orientación del aeronave. La velocidad media de vuelo del ganador se encontraba alrededor de los 0.7 m/s. 
+
+En 2018, Kaufmann et al. \cite{BeautyAndTheBeast} ganaron la competición IROS 2018 Autonomous Drone Race  empleando técnicas de aprendizaje automático para la detección de las puertas del circuito. Para generar las trayectorias de control fijaban dos puntos de paso, uno en frente de la siguiente puerta y otro después de la siguiente puerta. Para seguir estas trayectorias emplearon un controlador MPC con el que consiguieron adquirir velocidades de vuelo próximas a los 2 m/s.
+
+En el 2019 se celebró la primera edición de la competición AlphaPilot 2019, en la que Foehn et al. \cite{foehn2020alphapilot} consiguieron un segundo puesto empleando una arquitectura novedosa, empleando estrategias de aprendizaje automático junto con un filtrado no lineal de las mediciones de los sensores y la generacion trayectorias óptimas en tiempo. Emplearon un controlador PD con el que alcanzaron velocidades máximas de unos 8 m/s, lo que significa un aumento considerable de la velocidad de vuelo con respecto a las velocidades a las que se movían los drones en la ADR.
+
+Además en 2019, se celebra la primera carrera de drones autónomos puramente simulada, Game of Drones en el marco de la conferencia NeurIPS 2019. Los ganadores de la carrera Shin et al. \cite{shinreport} emplearon técnicas de aprendizaje por refuerzo  (\textit{reinforcement learning}) para diseñar el controlador del aeronave, con el cual consiguieron alcanzar velocidades máximas de hasta 16 m/s en un entorno simulado.
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=0.75\textwidth]{imagenes/gameofdrones}
+	\caption{Entorno de simulación empleado en la competición Game of Drones dentro de la conferencia NeurIPS 2019}
+	\label{estado:GoD}
+\end{figure}
+
+
+
+
 
 
 

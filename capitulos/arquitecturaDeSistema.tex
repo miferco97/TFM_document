@@ -26,5 +26,25 @@ A continuación se explicará más detalladamente los distintos nodos que compon
 	
 \end{itemize}
 
+\tb{\Large Añadir Diagrama de la arquitectura con los topics involucrados.}
+
+\section{Detalles de implementación}
+
+Todos los algoritmos desarrollados se han implementado en C++17 haciendo uso tanto de las librerías estándar como de las librerías estándar de ROS . Además se ha hecho uso de algunas librerías específicas como OpenCV 4.0 para el tratamiento de las imágenes, así como Eigen3 para computar las operaciones matriciales requeridas por los algoritmos implementados. A continuación, se explicarán algunos detalles de implementación relevantes de los distintos módulos.
+
+\subsection{Módulo de control}
+
+Para facilitar el ajuste de las ganancias de los distintos controladores se ha empleado la librería de ROS \textit{dynamic reconfigure}. Esta librería permite variar el valor de distintos parámetros en tiempo de ejecución, lo que facilita enormemente el ajuste fino de los parámetros de los controladores. 
+\tb{\Large Imagen Dynamic Reconfigure}
+\newpage
+\subsection{Módulo de generación de trayectorias}
+
+Dado que las dos trayectorias generadas, la de corto y la de largo plazo, se generan empleando \textit{splines} se ha unificado el algoritmo de generación en una clase común a ambos módulos. Aunque al comienzo del proyecto se empleo una implementación propia de estos algoritmos, finalmente se ha optado por emplear la implementación realizada por la ETHZ (disponibles para la comunidad robótica en \url{https://github.com/ethz-asl/mav_trajectory_generation}) debido a que alcanzaban una mayor eficacia en la generación de las mismas.
+
+Adicionalmente, debido a que el módulo generador de trayectorias a corto plazo es el encargado también de generar las referencias del controlador ha sido necesario paralelizar la generación de las trayectorias y la evaluación de las mismas a lo largo del tiempo. Es por eso que se ha separado la computación en dos hilos diferentes: un hilo principal que se encarga de muestrear la trayectoria generada a una alta frecuencia (100 Hz) y de enviar las referencias al controlador y un hilo secundario que se encarga de generar la siguiente trayectoria a corto plazo a seguir.
+
+\tb{\Large Pequeña imagen de los hilos}
+
+
 
 

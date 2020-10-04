@@ -1,9 +1,9 @@
 \chapter{Metodología}
 	
-\tb{En los capítulos anteriores se ha presentado los distintos algoritmos de control y generación de trayectorias que se emplearñan para conseguir recorrer un circuito con un \tb{dron} de carreras autónomo }. En este apartado se presenta la metodología empleada para superar las pruebas clasificatorias del Alphapilot 2019 
+En los capítulos anteriores se ha presentado los distintos algoritmos de control y generación de trayectorias que se emplearán para intentar recorrer un circuito con un cuadricóptero de carreras autónomo en un entorno simulado. En este apartado se presenta la metodología empleada para superar el circuito que fue propuesto durante las pruebas clasificatorias del Alphapilot 2019.
 
 \section{Sistemas de referencia}
-Antes de continuar con la metodología empleada, es conveniente fijar los sistemas de referencia que se van a emplear. \tb{...}
+Antes de continuar con la metodología empleada, es conveniente fijar los sistemas de referencia que se van a emplear. Primeramente se empleara un sistema de coordenadas global en el mundo. El origen de este sistema de referencia global fijo viene dado por el simulador y se encuentra en el centro del circuito. A partir de este sistema estableceremos el sistema de referencias móvil del aeronave, cuyo origen se encuentra en el centro de masas del cuadricóptero y las direcciones de los ejes siguen el estándar ENU (\textit{East North Up}). Finalmente, se generará un sistema de referencia móvil para cada puerta del circuito, cuyos orígenes corresponderán al centro de las puertas. 
 
 \begin{figure}[htb!]
 	\centering
@@ -30,7 +30,7 @@ En la competición se proporciona el orden en el que se deben atravesar las puer
 
 Para poder realizar la estimación \textit{online} de las puertas, es necesario percibirlas, para ello se hace uso de las cámaras integradas en la aeronave simulada. Las cámaras del cuadricóptero permiten localizar las distintas puertas a lo largo del circuito. La imagen provista por el simulador, además de contener la imagen observada por la cámara, contiene también las posiciones en el plano imagen, de las esquinas de las puertas visibles, así como el identificador de puerta a la que corresponde.
 
-\tb{imagen con los puntos rojos}
+\tb{\Large Añadir imagen con los puntos rojos}
 
 Esta información extra provista por el simulador facilita enormemente la estimación de las posiciones de las distintas puertas, reduciendo también el tiempo de calculo requerido.
 
@@ -57,7 +57,7 @@ La incertidumbre de estas medidas disminuye a medida que el aeronave se acerca a
 \end{enumerate}
 
 
-Con este proceso se consiguen actualizar las posiciones estimadas de las puertas con una frecuencia aproximada de \tb{30 Hz}, la frecuencia de refresco de las cámaras. En los casos en los que se encuentran varias puertas en la imagen se realizan el filtrado anterior para cada una de ellas por separado.
+Con este proceso se consiguen actualizar las posiciones estimadas de las puertas con una frecuencia aproximada de 60 Hz, la frecuencia de refresco de las cámaras. En los casos en los que se encuentran varias puertas en la imagen se realizan el filtrado anterior para cada una de ellas por separado.
 
 \section{Trayectorias a largo y corto plazo}
 
@@ -66,12 +66,13 @@ Con la posición estimada de cada puerta en el mundo es posible construir la tra
 Dado que el circuito es amplio y no existen obstáculos entre dos puertas sucesivas, no se tienen en cuenta los obstáculos del circuito para la generación de trayectorias. Para asegurar esto, es necesario que las trayectorias generadas no se alejen demasiado de las lineas rectas que unen las distintas puertas sucesivas. A continuación, se explicará de forma más detallada cómo se generan estas trayectorias.
 \subsection{Trayectoria a largo plazo}
 
-Para poder generar trayectorias suaves a lo largo de todo el circuito es conveniente tener en cuenta las posiciones aproximadas de todas las puertas,  de esta forma a medida que el aeronave recorre la trayectoria obtiene nuevas estimaciones que permiten ir refinando la trayectoria. Si se generase la trayectoria solo teniendo en cuenta los $m$ siguientes waypoints, la trayectoria a seguir variaría mucho después de pasar una puerta, lo que perjudicaría en el rendimiento de la aeronave Dado que el dron obtiene nuevas mediciones a una frecuencia de unos \tb{30 Hz} esta trayectoria se tiene que ir actualizando continuamente, por lo que es conveniente minimizar el tiempo de cómputo de cada una. 
+Para poder generar trayectorias suaves a lo largo de todo el circuito es conveniente tener en cuenta las posiciones aproximadas de todas las puertas,  de esta forma a medida que el aeronave recorre la trayectoria obtiene nuevas estimaciones que permiten ir refinando la trayectoria. Si se generase la trayectoria solo teniendo en cuenta los $m$ siguientes waypoints, la trayectoria a seguir variaría mucho después de pasar una puerta, lo que perjudicaría en el rendimiento de la aeronave. Dado que el dron obtiene nuevas mediciones a una frecuencia de unos 60 Hz esta trayectoria se tiene que ir actualizando continuamente, por lo que es conveniente minimizar el tiempo de cómputo de cada una. 
 
 Como se ha presentado en el capítulo \ref{cap:gen_tray} las trayectorias que se van a emplear son \textit{splines} en las que el grado de los segmentos polinómicos depende de la acción de control a minimizar. Los dos factores que afectan principalmente al tiempo de cómputo son el grado de los segmentos polinomiales, ya que a mayor grado, mayor número de coeficientes se deben calcular, y el número de \textit{waypoints}, ya que aumenta el número de segmentos polinomiales.
 
 Para poder generar una ruta a través de todo el circuito que se calcule de la forma más rápida posible y que tenga en cuenta las limitaciones físicas de la aeronave, se ha empleado trayectorias de aceleración mínima ($n = 2$) con 12 \textit{waypoints}, 11 de las puertas y 1 de la posición de la aeronave. Estas trayectorias son rápidas de calcular y permiten actualizar la trayectoria con una frecuencia superior a la de adquisición de la cámara. Estas trayectorias cambian continuamente, por lo que no es conveniente usar estas trayectorias para controlar el cuadricóptero ya que las referencias del controlador estarían cambiando continuamente, generando un movimiento muy poco fluido. Para solucionar esto se emplean las trayectorias a corto plazo.
-\tb{alguna imagen en rviz}
+
+\tb{\Large Añadir alguna imagen en rviz}
 \subsection{Trayectoria a corto plazo}
 
 Para generar la trayectoria que va a seguir el controlador, es conveniente generar trayectorias de \textit{snap} mínimo ($n=4$), ya que son las que generan trayectos más suaves. El grado de los polinomios que componen estas \textit{splines} son de grado 7, lo que implica un elevado coste computacional. Además, es conveniente que los \textit{waypoints} empleados para generar esta trayectoria estén cerca (una distancia inferior a los 8 m entre waypoints), ya que si se eligen waypoints muy separados, la trayectoria resultante puede separarse demasiado de la linea recta entre ellos, llegando a poder colisionar con el entorno. Por lo que para generar una trayectoria completa del circuito sería necesaria una gran cantidad de waypoints, por lo que el tiempo de cómputo sería muy elevado, haciendo que el sistema no sea capaz de reaccionar a cambios en las posiciones de las puertas de forma rápida.

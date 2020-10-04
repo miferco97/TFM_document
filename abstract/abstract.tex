@@ -25,25 +25,29 @@ Una trayectoria que abarca todo el recorrido del circuito y otra más corta dent
 
 \section*{Experimentación y resultados.}
 
-Para realizar los experimentos se ha empleado el entorno de simulación Flightgoogles \tb{citar}  el cual fue el empleado para las pruebas clasificatorias virtuales del Alphapilot 2019. Durante el transcurso del trabajo se han realizado experimentos para la evaluación de los controladores implementados, en los que se prueba el rendimiento de los mismos recorriendo trayectorias sencillas a distintas velocidades. Asimismo, se han realizado experimentos recorriendo el circuito de carreras entero, en los que se prueba el rendimiento del generador de trayectorias y de la arquitectura diseñada.
+Para realizar los experimentos se ha empleado el entorno de simulación Flightgoogles \cite{guerra2019flightgoggles}  el cual fue el empleado para las pruebas clasificatorias virtuales del Alphapilot 2019. Durante el transcurso del trabajo se han realizado experimentos para la evaluación de los controladores implementados, en los que se prueba el rendimiento de los mismos recorriendo trayectorias sencillas a distintas velocidades. Asimismo, se han realizado experimentos recorriendo el circuito de carreras entero, en los que se prueba el rendimiento del generador de trayectorias y de la arquitectura diseñada.
 
-En estos experimentos se puede observar como el controlador para grandes ángulos es capaz de alcanzar velocidades más altas (\tb{hasta 11 m/s}) con un menor error de seguimiento que el controlador linealizado. La arquitectura presentada es capaz de recorrer el circuito entero de forma satisfactoria en 24 segundos, posicionándose entre los 3 mejores resultados obtenidos por los equipos participantes en las clasificatorias del AlphaPilot2019 \tb{cite filght googles paper}\footnote{Estos resultados fueron presentados en el Workshop  \textit{Perception and Control for Fast and Agile Super-Vehicles} de la conferencia RSS20, integrando los módulos de percepción y estimación de estados desarrollados por Carlos Redondo Plaza}.
+En estos experimentos se puede observar como el controlador para grandes ángulos es capaz de alcanzar velocidades más altas (hasta 11 m/s) con un menor error de seguimiento que el controlador linealizado. La arquitectura presentada es capaz de recorrer el circuito entero de forma satisfactoria en 24 segundos, tiempo que se encuentra dentro de los 3 mejores tiempos obtenidos por los equipos participantes en las clasificatorias del AlphaPilot2019 \cite{guerra2019flightgoggles} \footnote{Estos resultados fueron presentados en el Workshop  \textit{Perception and Control for Fast and Agile Super-Vehicles} de la conferencia RSS20, integrando los módulos de percepción y estimación de estados desarrollados por Carlos Redondo Plaza}. Un vídeo mostrando el funcionamiento del sistema en simulación se puede encontrar en \url{https://vimeo.com/428975020/80051cd0d8}.
 
 
 \section*{Conclusiones y trabajo futuro}
 
-Se ha conseguido desarrollar sistema capaz 
+Se ha conseguido desarrollar sistema modular capaz de recorrer un circuito de carreras de forma autónoma de forma satisfactoria. El controlador implementado permite realizar trayectorias a velocidades muy elevadas, aunque para conseguir disminuir el error de seguimiento sería posible emplear un controlador MPC que sea capaz de mitigar los cambios bruscos en las referencias. Finalmente, la decisión de dividir la generación de trayectorias en dos partes ha permitido computar ambas trayectorias a una alta frecuencia siendo capaces de adecuarse correctamente a los cambios en las estimaciones de las posiciones de las puertas en el circuito. En versiones futuras, sería conveniente tener en cuenta restricciones espaciales en la generación de las mismas.
+
+La arquitectura propuesta permite su extensión con nuevos módulos de forma sencilla, por lo que se podría emplear para realizar otras tareas mediante la integración de los módulos necesarios.
+
 \newpage
 \section*{Palabras clave}
-UAV, cuadricóptero, control clásico, aprendizaje automático, inteligencia artificial, aprendizaje por refuerzo, redes neuronales.
+UAV, cuadricóptero, modelado dinámico, teoría de control, generación de trayectorias, sistemas autónomos.
 
 \section*{Códigos UNESCO}
 \begin{itemize}
-	\item[] $120304$ \quad INTELIGENCIA ARTIFICIAL
 	\item[] $120326$ \quad SIMULACIÓN
 	\item[] $330104$ \quad AERONAVES
 	\item[] $330412$ \quad DISPOSITIVOS DE CONTROL
-	\item[] $330703$ \quad DISEÑO DE CIRCUITOS 
+	\item[]	$330118$ \quad ESTABILIDAD Y CONTROL
+	\item[] $330417$ \quad SISTEMAS EN TIEMPO REAL 
+		
 
 \end{itemize}
 \newpage

@@ -46,23 +46,38 @@ Para desarrollar los algoritmos y comparar el rendimiento del sistema realizado,
 
 \section{Objetivos}
 
-\tb{completar objetivos}
+
 Para poder llevar a cabo el desarrollo del trabajo de forma adecuada es conveniente desgranar los objetivos principales en tareas de alcance más reducido:
 
 \begin{itemize}
 	\item \textbf{Modulo de control}	
 	\begin{itemize}
-		\item Estudio del estado del arte acerca de los algoritmos de control más relevantes en las carreras de drones .
+		\item Modelado dinámico del comportamiento de un cuadricóptero.
+		\item Estudio del estado del arte acerca de los algoritmos de control más relevantes en las carreras de drones.
+		\item Desarrollo teórico de los algoritmos de control para ángulos pequeños
+		y para ángulos grandes.
+		\item Implementación de ambos algoritmos dentro del módulo de control.
+		\item Ajuste de los parámetros de los controladores.
+		\item Evaluación del rendimiento de ambos controladores en un entorno simulado.
+				
 	\end{itemize}
 
 	\item \textbf{Generación de trayectorias}	
 	\begin{itemize}
 		\item Estudio del estado del arte acerca de los métodos de generación de trayectorias más empleados.
+		\item Desarrollo teórico de los algoritmos de generación de trayectorias que se van a emplear.
+		\item División del módulo generador de trayectorias en corto y largo plazo.
+		\item Implementación de los algoritmos de generación de trayectorias empleados.
+		\item Evaluación del rendimiento de los generadores de trayectorias mediante el recorrido del circuito de carreras en simulación.
 	\end{itemize}
 
 	\item \textbf{Arquitectura del sistema}	
 	\begin{itemize}
-		\item Estudio de las arquitecturas empleadas por los ganadores de las diversas competiciones de drones autónomos .
+		\item Estudio de las arquitecturas empleadas por los ganadores de las diversas competiciones de drones autónomos.
+		\item Descomposición del sistema en los distintos módulos separados que compondrán la arquitectura final.
+		\item Implementación de los módulos de estimación y percepción partiendo de las mediciones provistas por el simulador.
+		\item Evaluación del funcionamiento completo de la arquitectura mediante el recorrido del circuito simulado. 
+		
 	\end{itemize}
 	
 	

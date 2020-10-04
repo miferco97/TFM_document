@@ -1,10 +1,10 @@
 \chapter{Modelado de un cuadricóptero}
 
-Un cuadricóptero es un robot aéreo con 6 grados de libertad (3 rotacionales y 3 traslacionales) y 4 motores, al tener menos motores que el número de grados de libertad, se dice que es un sistema subactuado.
+Un cuadricóptero es un robot aéreo con 6 grados de libertad (3 rotacionales y 3 traslacionales) y 4 motores, al tener menos motores que el número de grados de libertad, se dice que es un sistema subactuado \cite{ferrin2011differential}\cite{MinimunSnap2011}\cite{mellinger2012trajectory}.
 
 \begin{figure}[htb!]
 	\centering
-	\includegraphics[width=0.65\textwidth]{imagenes/uav_coordinate_system}
+	\includegraphics[width=0.75\textwidth]{imagenes/uav_coordinate_system}
 	\caption{Esquema de fuerzas y momentos que actúan sobre un cuadricóptero y sus sistemas de referencia asociados. }
 	\label{modelado:uav_coordinate}
 \end{figure}
@@ -32,6 +32,7 @@ En el sistema de referencia $B$ las componentes del vector velocidad angular $\O
 
 \begin{equation}
 	\Omega = p \mathbf{x_B} + q \mathbf{y_B} + r \mathbf{z_B}
+	\label{refOmega}
 \end{equation}
 
 Estas componentes están relacionadas con las derivadas de los ángulos de Euler de acuerdo a
@@ -164,25 +165,124 @@ Finalmente se unen las expresiones \ref{model:rot2} y \ref{model:rot3} para obte
 	\end{bmatrix}
 \end{align}
 
-\section{\tb{differetial flatness}}
+\section{Planicie diferencial (\textit{differential flatness})}\label{diffFlat}
+
+A continuación, se mostrará que la dinámica de un cuadricóptero es plana diferencialmente \cite{mellinger2012trajectory}\cite{ferrin2011differential}\cite{MinimunSnap2011}, esto implica que las entradas del sistema se pueden escribir en función de unas ``salidas planas'' escogidas cuidadosamente y de sus correspondientes derivadas. Esto implica que cualquier trayectoria suave generada en el espacio de las ``salidas planas'' puede ser seguida por el cuadricóptero de forma satisfactoria (dentro de las limitaciones físicas del sistema), lo que facilitará la generación de trayectorias posteriormente . 
+
+Las salidas planas que se han escogido vienen dadas por :
+\begin{equation}
+	\sigma = [x,y,z,\psi]^t
+\end{equation}
+siendo $\mathbf{r}= [x,y,z]^t$ las coordenadas del centro de masas del aeronave en el mundo y $\psi$ el ángulo en yaw correspondiente. A continuación se demostrará como se puede expresar el estado del aeronave en función de estas salidas.
+
+\subsubsection{Posición, velocidad y aceleración}
+
+Es trivial observar como la posición, velocidad y aceleración del aeronave son funciones de las salidas escogidas:
+\begin{align}
+[x,y,z]^t &= [\sigma_1,\sigma_2,\sigma_3]^t\\
+[\ddot x,\dot y,\dot z]^t &= [\dot \sigma_1,\dot \sigma_2,\dot \sigma_3]^t\\
+[\ddot x,\ddot y,\ddot z]^t &= [\ddot \sigma_1,\ddot \sigma_2,\ddot \sigma_3]^t
+\end{align}
+
+
+\subsubsection{Orientación}
+Para observar que la orientación del cuadricóptero es función de estas salidas es necesario considerar las ecuaciones de movimiento \ref{analisis:eq1} y \ref{analisis:eq2}. Si expresamos el vector $z_b$ en función de $\sigma$ obtenemos que:
+\begin{equation}
+	\mathbf{z}_B = \frac{\mathbf{t}}{||\mathbf{t}||} \quad;\quad \mathbf{t} = [\ddot\sigma_1,\ddot\sigma_2,\ddot\sigma_3 + g]^t
+\end{equation}
+
+Por otro lado, siendo el angulo de yaw $\psi = \sigma_4$ se puede expresar el vector $\mathbf{x}_c$ , obtenido después de aplicar únicamente la rotación sobre yaw ,como:
+\begin{equation}
+	\mathbf{x}_c = [cos\;\sigma_4,sen\;\sigma_4,0]^t
+\end{equation}
+
+El objetivo es conseguir expresar la matriz de rotación $R_B = [\mathbf{x}_B,\mathbf{y}_B,\mathbf{z}_B]$ en función de estos dos vectores $\mathbf{x}_C$ y $\mathbf{z}_B$. Esto se obtiene directamente al calcular $\mathbf{x}_B$ y $\mathbf{y}_B$ de la siguiente forma:
+\begin{equation}
+	\mathbf{y}_{B} = \frac{\mathbf{z}_{B}\times\mathbf{x}_{C}}{||\mathbf{z}_{B}\times\mathbf{x}_{C}||}\;,\; \mathbf{x}_{B} = \mathbf{y}_{B} \times\mathbf{z}_{B}
+\end{equation}
+
+\subsubsection{Velocidad angular}
+Para expresar la velocidad angular en función de $\sigma$ y sus derivadas, es necesario considerar la primera derivada de la expresión \ref{analisis:eq1}, la cual se puede expresar como:
+\begin{equation}
+	\label{df:d1}
+	m\mathbf{\dot a} = \dot F \;\mathbf{z}_B + \Omega_{BW} \times F \;\mathbf{z}_B
+\end{equation}
+
+Si proyectamos ésta expresión entorno al eje $\mathbf{z}_B$, considerando que $\dot F = \mathbf{z}_B \cdot m  \mathbf{\dot a}$, podemos definir la proyección $\textbf{h}_\Omega$ de $\frac{m}{F}\mathbf{\dot a}$ en el plano $\textbf{x}_B - \textbf{y}_B$ como:
+
+\begin{equation}
+\textbf{h}_\Omega = \Omega_{BW}\times\mathbf{z}_B = \frac{m}{F}(\mathbf{\dot a}-(\mathbf{z}_B \cdot \mathbf{\dot a})\mathbf{z}_B)
+\end{equation}
+
+Si descomponemos los componentes de la velocidad angular $\Omega_{BW}$ como se realiza en la expresión \ref{refOmega} se obtienen las componentes $p$ y $q$ de la velocidad como:
+\begin{equation}
+	p = -\textbf{h}_\Omega \cdot \mathbf{y}_B \quad;\quad q = \textbf{h}_\Omega \cdot \mathbf{x}_B
+\end{equation}
+Finalmente se puede obtener la componente $r$ de la velocidad considerando $\Omega_{BW} = \Omega_{BC} + \Omega_{CW}$, donde la tercera componente de 
+$\Omega_{BC}$ es nula por lo que:
+
+\begin{equation}
+	r = \Omega_{CW} \cdot \mathbf{z}_B =  \dot \sigma_4 \mathbf{z}_W \cdot \mathbf{z}_B
+\end{equation}
+
+\subsubsection{Aceleración angular}
+Finalmente, para considerar que la dinámica del cuadricóptero es diferencialmente plana es necesario expresar las componentes de la aceleración angular del mismo en función de las salidas planas y sus derivadas. Para ello comenzamos derivando la expresión \ref{df:d1}:
+
+\begin{align}
+	m\mathbf{\ddot a} &= \ddot F \;\mathbf{z}_B + 2 \Omega_{BW} \times \dot F \;\mathbf{z}_B \nonumber\\
+	&+ \Omega_{BW}\times\Omega_{BW}\times F \;\mathbf{z}_B + \dot{\Omega}_{BW}\times F \;\mathbf{z}_B	\label{df:d2}
+\end{align}
+A partir de esta expresión podemos encontrar las componentes de la aceleración angular $\dot \Omega_{BW}$ considerando $\textbf{h}_{\dot \Omega} = {\dot\Omega_{BW} \times \mathbf{z}_B}$ con lo que :
+
+\begin{equation}
+	\dot p = -\textbf{h}_{\dot \Omega} \cdot \mathbf{y}_B \quad;\quad \dot q = \textbf{h}_{\dot \Omega}  \cdot \mathbf{x}_B
+\end{equation}
+
+Para concluir se calcula la componente $\dot{r}$ de la aceleración angular de forma análoga a como se calculaba la componente $\dot{r}$ de la velocidad angular, con lo que se obtiene que :
+
+\begin{equation}
+	 \dot r = \dot\Omega_{CW} \cdot \mathbf{z}_B =  \ddot \sigma_4 \mathbf{z}_W \cdot \mathbf{z}_B
+	\end{equation}
 
 
 \chapter{Control}
-En este capítulo se desarrollará la teoría general para el control de un cuadricóptero \tb{Citar artículos a cholón}, la cual se adaptará posteriormente al caso particular de la arquitectura empleada.\\
+En este capítulo se desarrollará la teoría general para el control de un cuadricóptero \cite{MinimunSnap2011}\cite{mahony2012multirotor}\cite{amir2008modeling}\cite{mellinger2012trajectory}, la cual se adaptará posteriormente al caso particular de la arquitectura empleada.
 
-El problema del control se puede expresar formalmente: 
-Dado el estado del sistema $x(t)$ \tb{continuar . ... }
-como encontrar la función $u(t)$ tal que, el estado $x(t)$ sigue la trayectoria desesada $x^{des}(t)$ a lo largo del tiempo.\tb{profundizar en la forma de la trayectoria , posicion, velocidad y aceleración}\\
-Si se define el error $e(t)$ del control como:
+El problema del control se puede expresar como: 
+Dado el estado del sistema $\mathbf{x}(t)$, la señal de entrada al sistema $\mathbf{u}(t)$ y el modelo dinámico del sistema $ \mathbf{\dot x}(t) = f(\mathbf{x}(t),\mathbf{u}(t))$, el objetivo del control es encontrar la función $\mathbf{u}(t)$ tal que, el estado $\mathbf{x}(t)$ sigue la trayectoria deseada $\mathbf{\Gamma}^{des}(t)$ a lo largo del tiempo.
+
+ Como se observo en el apartado \ref{diffFlat}, las trayectorias deseadas $\mathbf{\Gamma}^{des}(t)$ constarán de 12 componentes : las 3 coordenadas correspondientes a la posición tridimensional deseada de la aeronave y el ángulo de yaw deseado, así como la primera y la segunda derivada de las mismas. Es por esto que si consideramos $\mathbf{\sigma}_{des}(t) = [x_{des},y_{des},z_{des}, \psi_{des}]^t$, entonces las trayectorias deseadas son de la forma:
+ 
+ \begin{equation}
+ 	\mathbf{\Gamma}^{des} = \begin{bmatrix}
+ 		\mathbf{\sigma}_{des}(t)\\
+ 		\mathbf{\dot \sigma}_{des}(t)\\
+ 		\mathbf{\ddot \sigma}_{des}(t)
+ 	\end{bmatrix}
+ \end{equation}
+
+
+Si se define el error de posición $\mathbf{e_p}(t)$ y el error de velocidad $\mathbf{e_v}(t)$ del controlador como:
 \begin{equation}
-	e(t) = x^{des}(t) - x(t)
+	\mathbf{e_p}(t) = \mathbf{\sigma}_{des}(t) -\begin{bmatrix}
+		x(t)\\
+		y(t)\\
+		z(t)\\
+		\psi(t)
+	\end{bmatrix} \quad;\quad 
+\mathbf{e_v}(t) = \mathbf{\dot \sigma}_{des}(t) -\begin{bmatrix}
+	\dot x(t)\\
+	\dot y(t)\\
+	\dot z(t)\\
+	\dot \psi(t)
+\end{bmatrix}
 \end{equation}
-el objetivo del controlador sería conseguir que el error $e(t)$ converja de forma exponencial a 0.
+el objetivo del controlador sería conseguir que los errores $\mathbf{e_p}(t)$ y $\mathbf{e_v}(t)$ converjan de forma exponencial a 0.
 
 
-El estado $x(t)$ de un cuadricóptero consta de 12 variables, las 6 correspondientes a su pose y sus derivadas correspondientes.
+El estado $\mathbf{x}(t)$ de un cuadricóptero consta de 12 variables, las 6 correspondientes a su pose y sus derivadas correspondientes.
 \begin{equation}
-	x(t) = \left[
+\mathbf{x}(t) = \left[
 	x  \;\;
 	y  \;\;
 	z  \;\;
@@ -196,16 +296,16 @@ El estado $x(t)$ de un cuadricóptero consta de 12 variables, las 6 correspondie
 	\dot{\theta}  \;\;
 	\dot{\psi}\;\right]^t
 \end{equation}
-Si llamamos $q$ al vector de configuración formado por las 6 primeras variables:
+Si llamamos $\mathbf{q}$ al vector de configuración formado por las 6 primeras variables:
 \begin{align}
-	q(t) &= \left[
+	\mathbf{q}(t) &= \left[
 	x  \;\;
 	y  \;\;
 	z  \;\;
 	\phi  \;\;
 	\theta  \;\;
 	\psi  \;\right]^t\\
-	x(t) &= \left[q \;\; \dot{q}\right]^t
+	\mathbf{x}(t) &= \left[\mathbf{q} \;\; \mathbf{\dot{q}}\right]^t
 \end{align}
 
 Para el control de la aeronave se han definido dos señales de entrada $\mathbf{u_1}$ y $\mathbf{u_2}$ siendo 
@@ -257,6 +357,7 @@ Al desglosar y linealizar las ecuaciones \ref{analisis:eq2} entorno a este estad
 	\ddot{z} &= \frac{1}{m}\mathbf{u_1}-g\nonumber
 \end{align}
 
+\subsubsection{Controlador en ángulo}
 Por otro lado, para obtener las ecuaciones que permiten controlar la rotación del cuadricóptero debemos desarrollar las ecuaciones \ref{model:rot_eq}. Debido a la simetría del cuadricóptero se considera que $I_{xx} \approx I_{yy}$, con lo que se obtienen las ecuaciones del movimiento rotacional:
 \begin{align}
 	I_ {xx} \dot p &= u_2 - qr(I_{zz}-I_{yy})\nonumber\\
@@ -279,15 +380,19 @@ Gracias a esto es posible expresar el valor de las acciones de control $\mathbf{
 
 En el estado de hover,las velocidades de roll y pitch son cero por lo que $p_{des} = 0\;, q_{des} = 0$.
 
-\subsection{\tb{Controlador de posición}}
+\subsubsection{Controlador en posición}
 
+Con el controlador anterior se consigue controlar la orientación del cuadricóptero, 
+este controlador se debe combinar con un controlador de más alto nivel que genere las referencias angulares para el controlador angular.
+En cuanto al tipo de controlador en posición se ha decidido emplear un controlador PD. 
 
-En cuanto al tipo de controlador se ha decidido emplear un controlador PD. En un controlador PD el objetivo de seguir la trayectoria $r_T$ deseada es conseguir que la expresión \ref{pd:1} tienda a 0 en un tiempo exponencial:
+En un controlador PD el objetivo de seguir la trayectoria $r_T$ deseada es conseguir que la expresión \ref{pd:1} tienda a 0 en un tiempo exponencial:
 \begin{equation}
 	\label{pd:1}
 	\left(\ddot{r_T} - \ddot{r_c}\right) + K_d e_v + K_p e_p = 0
 \end{equation}
 siendo $e_v = (\dot r_T - \dot r_c )$ y $e_p = (r_T - r_c )$. Las constantes $K_d,K_p \in \mathbb{R^+}$ del controlador definen la dinámica y la estabilidad del sistema.
+\\
 
 Desarrollando \ref{pd:1}:
 \begin{align}
@@ -313,16 +418,17 @@ por lo que :
 Como el angulo de \textit{yaw} $\psi_T(t)$ se incluye en la trayectoria definida, entonces:
 \begin{align}
 	\psi_{des} &= \psi_T(t)\\
-	r_{des} &= \dot\psi_T(t)
+		\dot\psi_{des} &= \dot\psi_T(t)
 \end{align} 
 
-\tb{ completar un poco más }
+Con esto se consigue obtener la señal de control $\mathbf{u_1}$ así como las referencias del controlador angular $\phi^{des}$, $\theta^{des}$ y $\psi^{des}$.
 
 \section{Controlador para ángulos grandes}
-A continuación se presenta un controlador que no parte de la premisa de que el estado de la aeronave es cercano al de equilibrio y que permite seguir trayectorias $\sigma_T = [\mathbf{r}_T(t)^t, \psi_T(t)]^t$.
+A continuación se presenta un controlador que no parte de la premisa de que el estado de la aeronave es cercano al de equilibrio, sino que parte de la dinámica diferencialmente plana del cuadricóptero (apartado \ref{diffFlat}), lo que permite seguir trayectorias suaves de la forma $\mathbf{\Gamma}^{des}(t)$.
 
 El objetivo de este controlador es orientar el vector $z_B$ de la aeronave con la dirección de la fuerza necesaria $\mathbf{F}_{des}$ para poder seguir la trayectoria.
-\tb{imagen}
+
+\tb{\large añadir diagrama}
 
 Para ello primero definiremos los errores en posición y velocidad:
 \begin{align}
@@ -386,13 +492,13 @@ Este controlador presenta dos ventajas considerables con respecto al controlador
 	\item La fuerza deseada se proyecta sobre el vector $z_B$ de la aeronave en el instante actual, en lugar de considerar que éste siempre apunta verticalmente, por lo que mejora notablemente el control en trajectorias agresivas, donde la aeronave presenta una gran inclinación.
 \end{enumerate}
 
-\tb{hablar de la estabilidad y robustez del sistema}
-
+%\tb{hablar de la estabilidad y robustez del sistema}
+\newpage
 \section{Adaptación del controlador al entorno simulado.}
 
 En los controladores anteriores las señales de salida están directamente relacionadas con la velocidad de giro de cada motor y de la fuerza de empuje que genera cada uno, como se puede observar en las expresiones \ref{eq:u1} y \ref{eq:u2}. Sin embargo, en la competición, no se tiene el control de cada motor de forma independientemente, si no que hay un controlador interno que controla los motores. Es por esto que, es necesario adaptar los controladores del estado del arte mostrados anteriormente al nuevo conjunto de señales de entrada disponibles.
 
-\tb{diagrama nuevo}
+\tb{\Large Añadir diagrama nuevo}
 
 El controlador interno del cuadricóptero tiene como consignas a seguir las velocidades angulares del cuadrícoptero deseadas, así como el empuje total que deben proporcionar los motores. Estas son las señales que envían los pilotos de carreras de drones profesionales a través de sus mandos, debido al gran control que tienen de la aeronave. Al poder controlar el empuje total de la aeronave, la señal $u_1$ se mantiene igual que en los controladores anteriores, sin embargo es necesario realizar algunas pequeñas modificaciones en los controladores angulares. Las otras 3 señales de control que se van a emplear son las referencias del controlador interno $p_{ref}$,$q_{ref}$ y $r_{ref}$.
 
