@@ -26,7 +26,13 @@ A continuación se explicará más detalladamente los distintos nodos que compon
 	
 \end{itemize}
 
-\tb{\Large Añadir Diagrama de la arquitectura con los topics involucrados.}
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{imagenes/Arquitectura}
+	\caption{Diagrama de la arquitectura empleada con los tópicos principales}
+	\label{Arquitectura}
+\end{figure}
+
 
 \section{Detalles de implementación}
 
@@ -35,7 +41,15 @@ Todos los algoritmos desarrollados se han implementado en C++17 haciendo uso tan
 \subsection{Módulo de control}
 
 Para facilitar el ajuste de las ganancias de los distintos controladores se ha empleado la librería de ROS \textit{dynamic reconfigure}. Esta librería permite variar el valor de distintos parámetros en tiempo de ejecución, lo que facilita enormemente el ajuste fino de los parámetros de los controladores. 
-\tb{\Large Imagen Dynamic Reconfigure}
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=0.67\textwidth]{imagenes/Rqt}
+	\caption{Ventana de configuración \textit{dynamic reconfigure}}
+	\label{waypoints:circuito}
+\end{figure}
+
+
+
 \newpage
 \subsection{Módulo de generación de trayectorias}
 
@@ -43,7 +57,7 @@ Dado que las dos trayectorias generadas, la de corto y la de largo plazo, se gen
 
 Adicionalmente, debido a que el módulo generador de trayectorias a corto plazo es el encargado también de generar las referencias del controlador ha sido necesario paralelizar la generación de las trayectorias y la evaluación de las mismas a lo largo del tiempo. Es por eso que se ha separado la computación en dos hilos diferentes: un hilo principal que se encarga de muestrear la trayectoria generada a una alta frecuencia (100 Hz) y de enviar las referencias al controlador y un hilo secundario que se encarga de generar la siguiente trayectoria a corto plazo a seguir.
 
-\tb{\Large Pequeña imagen de los hilos}
+%\tb{\Large Pequeña imagen de los hilos}
 
 
 

@@ -27,10 +27,17 @@ Para recorrer el circuito de forma satisfactoria es necesario que la aeronave at
 Como se puede observar en la figura \ref{waypoints:circuito} la aeronave debe recorrer 11 puertas, cada una con un número de identificación, en un orden concreto. Cada una de estas puertas posee unas medidas estandarizadas de 2x2 m.
 
 En la competición se proporciona el orden en el que se deben atravesar las puertas y una posición aproximada de las posiciones de cada una de ellas en el mundo. Esta posición aproximada posee un error significativo, por lo que es necesario corregir la estimación de la posición de estas puertas a medida que la aeronave avanza por el circuito (estimación \textit{online}).
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=0.68\textwidth]{imagenes/red_points}
+	\caption{La imagen provista por el simulador con las esquinas de las puertas visibles marcadas en rojo.}
+	\label{redpoints}
+\end{figure}
 
-Para poder realizar la estimación \textit{online} de las puertas, es necesario percibirlas, para ello se hace uso de las cámaras integradas en la aeronave simulada. Las cámaras del cuadricóptero permiten localizar las distintas puertas a lo largo del circuito. La imagen provista por el simulador, además de contener la imagen observada por la cámara, contiene también las posiciones en el plano imagen, de las esquinas de las puertas visibles, así como el identificador de puerta a la que corresponde.
 
-\tb{\Large Añadir imagen con los puntos rojos}
+Para poder realizar la estimación \textit{online} de las puertas, es necesario percibirlas, para ello se hace uso de las cámaras integradas en la aeronave simulada. Las cámaras del cuadricóptero permiten localizar las distintas puertas a lo largo del circuito. La imagen provista por el simulador, además de contener la imagen observada por la cámara, contiene también las posiciones en el plano imagen, de las esquinas de las puertas visibles (Figura \ref{redpoints}), así como el identificador de puerta a la que corresponde.
+
+
 
 Esta información extra provista por el simulador facilita enormemente la estimación de las posiciones de las distintas puertas, reduciendo también el tiempo de calculo requerido.
 
@@ -72,7 +79,14 @@ Como se ha presentado en el capítulo \ref{cap:gen_tray} las trayectorias que se
 
 Para poder generar una ruta a través de todo el circuito que se calcule de la forma más rápida posible y que tenga en cuenta las limitaciones físicas de la aeronave, se ha empleado trayectorias de aceleración mínima ($n = 2$) con 12 \textit{waypoints}, 11 de las puertas y 1 de la posición de la aeronave. Estas trayectorias son rápidas de calcular y permiten actualizar la trayectoria con una frecuencia superior a la de adquisición de la cámara. Estas trayectorias cambian continuamente, por lo que no es conveniente usar estas trayectorias para controlar el cuadricóptero ya que las referencias del controlador estarían cambiando continuamente, generando un movimiento muy poco fluido. Para solucionar esto se emplean las trayectorias a corto plazo.
 
-\tb{\Large Añadir alguna imagen en rviz}
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=1\textwidth]{imagenes/Rviz_traj_largo}
+	\caption{Visualización de las trayectoria a largo (blanco) y a corto (verde) plazo en Rviz.}
+	\label{rviz:traj_largo}
+\end{figure}
+\newpage
+
 \subsection{Trayectoria a corto plazo}
 
 Para generar la trayectoria que va a seguir el controlador, es conveniente generar trayectorias de \textit{snap} mínimo ($n=4$), ya que son las que generan trayectos más suaves. El grado de los polinomios que componen estas \textit{splines} son de grado 7, lo que implica un elevado coste computacional. Además, es conveniente que los \textit{waypoints} empleados para generar esta trayectoria estén cerca (una distancia inferior a los 8 m entre waypoints), ya que si se eligen waypoints muy separados, la trayectoria resultante puede separarse demasiado de la linea recta entre ellos, llegando a poder colisionar con el entorno. Por lo que para generar una trayectoria completa del circuito sería necesaria una gran cantidad de waypoints, por lo que el tiempo de cómputo sería muy elevado, haciendo que el sistema no sea capaz de reaccionar a cambios en las posiciones de las puertas de forma rápida.
