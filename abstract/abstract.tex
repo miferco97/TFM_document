@@ -1,22 +1,22 @@
 \chapter*{Resumen ejecutivo}
 \section*{Introducción}
 
-Los pequeños multirrotores no tripulados (comúnmente llamados drones) son vehículos cuya popularidad en el mundo de la industria es cada vez mayor siendo utilizados para realizar tareas en campos muy diversos, como la inspección industrial, la industria cinematográfica o para su uso en operaciones de búsqueda y rescate. Aunque la inmensa mayoría del uso de estas aeronaves es mediante teleoperación, el auge de estas aeronaves han llevado a la comunidad robótica hacia el desarrollo de sistemas capaces de realizar tareas de forma autónoma.
+Los pequeños multirrotores no tripulados (comúnmente llamados drones) son vehículos cuya popularidad en el mundo de la industria es cada vez mayor, siendo utilizados para realizar tareas en campos muy diversos, como la inspección industrial, la industria cinematográfica o para su uso en operaciones de búsqueda y rescate. Aunque la inmensa mayoría del uso de estas aeronaves es mediante teleoperación, el auge de estas aeronaves han llevado a la comunidad robótica hacia el desarrollo de sistemas capaces de realizar tareas de forma autónoma.
 
 Con el ánimo de impulsar el desarrollo de las tecnologías necesarias para conseguir mejorar la autonomía de estos drones, existen diversas competiciones internacionales como el IARC (International Aerial Robotics Competition), IMAV (International Micro Air Vehicle Competition) o MBZIRC (Mohamed Bin Zayed International Robotics Challenge), en las que el objetivo es conseguir que las aeronaves sean capaces de realizar pruebas complejas de forma autónoma. 
 
-Dentro de estás competiciones internacionales, existen las carreras de drones autónomos, como AlphaPilot , en las que el objetivo es que un dron sea capaz de recorrer un circuito de forma autónoma en el menor tiempo posible.
+Dentro de estás competiciones internacionales, existen las carreras de drones autónomos, como ADR o AlphaPilot, en las que el objetivo es que un dron sea capaz de recorrer un circuito de forma autónoma en el menor tiempo posible.
 
 \section*{Alcance}
-Los objetivos de este trabajo consisten en diseñar un sistema autonómo, para que un cuadricóptero sea capaz de recorrer un circuito de carreras de forma satisfactoria y en diseñar un controlador capaz de permitir que un cuadricóptero vuele a altas velocidades a través de un circuito, así como generar las trayectorias que el aeronave debe seguir para recorrer el circuito de forma óptima. Adicionalmente, los algoritmos están diseñados para ser ejecutados en un ordenador a bordo, por lo que se deben optimizar para obtener el mayor rendimiento.
+Los objetivos de este trabajo consisten en diseñar un sistema autonómo, para que un cuadricóptero sea capaz de recorrer un circuito de carreras de forma satisfactoria y en diseñar un controlador capaz de conseguir que un cuadricóptero vuele a altas velocidades a través de un circuito, así como generar las trayectorias que el aeronave debe seguir para recorrer el circuito de forma óptima. Adicionalmente, los algoritmos están diseñados para ser ejecutados en un ordenador a bordo, por lo que se deben optimizar para obtener el mayor rendimiento.
 El desarrollo y validación del trabajo se realizará el simulador y las reglas empleadas en la prueba virtual clasificatoria del AlphaPilot2019.
 \section*{Solución realizada}
 \begin{itemize}
 \item \textbf{Controlador:}
-Para conseguir que el cuadricóptero recorra el circuito a altas velocidades se han implementado dos controladores, uno linealizado en torno al punto de equilibrio, en los que la orientación del cuadricóptero varía un pequeño angulo respecto al estado de hover y otro para cuando esta variación es de un gran ańgulo.
+Para conseguir que el cuadricóptero recorra el circuito a altas velocidades se han implementado dos controladores, uno linealizado en torno al punto de equilibrio, en los que la orientación del cuadricóptero varía un pequeño ángulo respecto al estado de hover y otro para cuando esta variación es de un gran ángulo.
 
 \item \textbf{Generación de trayectorias:} Se ha dividido la generación de trayectorias en dos partes:
-Una trayectoria que abarca todo el recorrido del circuito y otra más corta dentro de un horizonte temporal próximo a la posición del cuadricóptero. Ambas son trayectorias óptimas, generadas por una \textit{spline}.
+Una trayectoria que abarca todo el recorrido del circuito y otra más corta dentro de un horizonte temporal próximo a la posición del cuadricóptero. Ambas son trayectorias óptimas, generadas por \textit{splines}.
 
 \item \textbf{Arquitectura del sistema:} Los algoritmos de control y generación de trayectorias se han integrado dentro de una arquitectura modular empleando el \textit{framework} de robótica ROS. Adicionalmente se han desarrollado módulos de percepción y estimación de estado empleando datos provistos por el simulador.
 

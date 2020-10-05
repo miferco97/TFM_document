@@ -18,7 +18,7 @@ A continuación se presentarán los resultados obtenidos en los distintos experi
 \section{Comparación entre controladores}
 
 
-Se ha comparado el rendimiento de los dos controladores desarrollados mediante el seguimiento de una trayectoria circular de 5 metros de radio a distintas velocidades. En estos experimentos se emplea la arquitectura presentada anteriormente en el apartado \tb(ref) empleando un generador de trayectorias simplificado, el cual genera la trayectoria con las ecuaciones parámetricas de una circunferencia en un plano bidimensional.
+Se ha comparado el rendimiento de los dos controladores desarrollados mediante el seguimiento de una trayectoria circular de 5 metros de radio a distintas velocidades. En estos experimentos se emplea la arquitectura presentada anteriormente en el capítulo \ref{cap:arquitectura} empleando un generador de trayectorias simplificado, el cual genera la trayectoria con las ecuaciones parámetricas de una circunferencia en un plano bidimensional.
 
 \subsection{Controlador ángulos pequeños controladores}
 
@@ -45,7 +45,7 @@ Se ha comparado el rendimiento de los dos controladores desarrollados mediante e
 
 \section{Recorrido del circuito de carreras}
 
-Para realizar los experimentos del recorrido completo del circuito se han empleado las mismas condiciones impuestas en las pruebas clasificatorias del AlphaPilot 2019. En estas pruebas las posiciones aproximadas de las puertas son conocidas a priori por el sistema, así como los indicadores de cada puerta vista por las cámaras y las posiciones de las esquinas de las mismas en la imagen como se supuso en el apartado \tb{ref}.
+Para realizar los experimentos del recorrido completo del circuito se han empleado las mismas condiciones impuestas en las pruebas clasificatorias del AlphaPilot 2019. En estas pruebas las posiciones aproximadas de las puertas son conocidas a priori por el sistema, así como los indicadores de cada puerta vista por las cámaras y las posiciones de las esquinas de las mismas en la imagen como se supuso en el apartado \ref{section:gen_traj}.
 En la arquitectura completa se ha optado por emplear el controlador para grande ángulos debido a que consigue alcanzar velocidades más altas de forma robusta. 
 
 Se ha recorrido el circuito con dos configuraciones distintas de las limitaciones dinámicas del sistema en la generación de trayectorias a corto plazo: Una configuración con valores más conservadores de velocidad y acceleración máximas y otra configuración con valores maś extremos de velocidad y aceleración máximas . A continuación se muestran los resultados obtenidos con cada configuración y las gráficas obtenidas durante el recorrido del circuito. Las trayectorias generadas mostradas en los gráficos corresponden a las referencias de posición obtenidas por el controlador a lo largo de todo recorrido, por lo que corresponden al muestreo de la trayectoria a corto plazo a lo largo del circuito.
@@ -80,16 +80,14 @@ De las gráficas obtenidas anteriormente se pueden obtener el valor medio y máx
 
 \begin{table}[htb!]
 	\centering
-	
 	\begin{tabular}{l|c|c|c|}
 		$\empty$&Eje x&Eje y&Eje z\\
 		\midrule
 		Error máximo (m)&1.5685&1.1577&0.7707\\
 		Error medio (m) &0.3143&0.7306&0.0796\\
-		
 	\end{tabular}
-	\label{table:error:1}
 	\caption{Errores de seguimiento durante el recorrido del circuito.}
+		\label{table_error_1}
 \end{table}
 
 
@@ -99,10 +97,9 @@ De las gráficas obtenidas anteriormente se pueden obtener el valor medio y máx
 		$\empty$&Máxima& Media\\
 		\midrule
 		Velocidad (m/s)&7.4119&5.7248\\
-		
 	\end{tabular}
-	\label{table:speed:1}
 	\caption{Velocidad del cuadricóptero durante el recorrido del circuito.}
+	\label{table_speed_1}
 \end{table}
 
 \subsection{Configuración de máxima velocidad.}
@@ -114,7 +111,7 @@ Los parámetros empleados durante la generación de trayectorias en este experim
 	\centering
 	\includegraphics[width=\textwidth]{imagenes/best_circuitFigure}
 	\caption{Trayectoria 3D planificada a lo largo del circuito (roja) y el recorrido realizado por el cuadricóptero (azul).}
-	\label{exp2:1}
+	\label{exp:1}
 \end{figure}
 \newpage
 \begin{figure}[htb!]
@@ -169,15 +166,15 @@ A continuación se discutirán los resultados obtenidos en el capítulo anterior
 
 En las figuras \ref{circle:slow} y \ref{circle:fast} se puede observar como ambos controladores son capaces de seguir la trayectoria propuesta correctamente a bajas velocidades. Sin embargo, se puede observar como el error de seguimiento del controlador para ángulos pequeños aumenta a medida que se incrementa la velocidad, comenzando a perder la estabilidad al alcanzar velocidades de unos 6 m/s. Debido al tamaño de la circunferencia escogido, cuando el cuadricóptero se aproxima a estas velocidades los ángulos de roll $\phi $ y pitch $\theta$ comienzan a crecer, por lo que la linealización en torno al estado de hover comienza a fallar, provocando las oscilaciones que se pueden observar en la 3ª gráfica de la figura \ref{circle:slow}.
 
-El controlador para grandes ángulos es capaz de sobrepasar esta velocidad sin problemas, llegando a velocidades de unos 10 m/s manteniendo un bajo error de seguimiento, como se puede observar en la figura \ref{circle:fast}. A partir de esta velocidad, se observa como el cuadricóptero comienza a alejarse de la trayectoria propuesta. Este fenómeno se puede deber a que se alcanza el empuje máximo que pueden dar los motores de la aeronave, lo que satura la señal de control de la aeronave, provocando que se llegue a una situación de equilibrio con un cierto error de seguimiento. 
+El controlador para grandes ángulos es capaz de sobrepasar esta velocidad sin problemas, llegando a velocidades de unos 10 m/s manteniendo un bajo error de seguimiento, como se puede observar en la figura \ref{circle:fast}. A partir de esta velocidad, se observa como el cuadricóptero comienza a alejarse de la trayectoria propuesta. Este fenómeno se puede deber a que se alcanza el empuje máximo que pueden dar los motores del aeronave, lo que satura la señal de control del aeronave, provocando que se llegue a una situación de equilibrio con un cierto error de seguimiento. 
 
-Con este análisis cualitativo se manifiestan los comportamientos esperados por ambos controladores: el controlador para ángulos pequeños se comporta bien a bajas velocidades, empeorando su rendimiento a medida que aumenta la inclinación de la aeronave, mientras que el controlador para grandes ángulos es capaz de volar a velocidades más elevadas de una forma más robusta. Es por esto que se decide emplear el controlador para grandes ángulos durante los experimentos del recorrido del circuito de carreras.
+Con este análisis cualitativo se manifiestan los comportamientos esperados por ambos controladores: el controlador para ángulos pequeños se comporta bien a bajas velocidades, empeorando su rendimiento a medida que aumenta la inclinación del aeronave, mientras que el controlador para grandes ángulos es capaz de volar a velocidades más elevadas de una forma más robusta. Es por esto que se decide emplear el controlador para grandes ángulos durante los experimentos del recorrido del circuito de carreras.
 
 \section{Recorrido del circuito de carreras}
 
-En los dos experimentos realizados con distintas configuraciones, se consigue recorrer el circuito entero de forma satisfactoria, atravesando las 11 puertas del circuito en el orden indicado sin colisionar con el entorno. Comparando las tablas \ref{table:speed:1} y \ref{table:speed:2}, se observa que con la configuración más agresiva se consigue aumentar de forma considerable la velocidad media a la que el aeronave recorre el circuito, obteniendo un aumento de un 60\% respecto a la configuración más conservadora. Sin embargo, en las figuras \ref{exp1:3} y \ref{exp2:3}  y en las tablas \ref{table:error:1} y \ref{table:error:2} se observa como el error de seguimiento también aumenta de forma considerable en la configuración más agresiva, llegando a duplicar el error medio en cada eje. Este aumento hace que sea más arriesgado usar está configuración ya que se aumenta considerablemente el riesgo de colisión al atravesar una puerta, además las velocidades de vuelo más elevadas también empeoran la calidad de las estimaciones del módulo de percepción, lo que aumenta aún más el riesgo de colisión. Los errores de seguimiento más elevados se encuentran entre los cambios en las trayectorias a corto plazo, debido a la discontinuidad existente entre las referencias enviadas al controlador.
+En los dos experimentos realizados con distintas configuraciones, se consigue recorrer el circuito entero de forma satisfactoria, atravesando las 11 puertas del circuito en el orden indicado sin colisionar con el entorno. Comparando las tablas \ref{table_speed_1} y \ref{table:speed:2}, se observa que con la configuración más agresiva se consigue aumentar de forma considerable la velocidad media a la que el aeronave recorre el circuito, obteniendo un aumento de un 60\% respecto a la configuración más conservadora. Sin embargo, en las figuras \ref{exp1:3} y \ref{exp2:3}  y en las tablas \ref{table_error_1} y \ref{table:error:2} se observa como el error de seguimiento también aumenta de forma considerable en la configuración más agresiva, llegando a duplicar el error medio en cada eje. Este aumento hace que sea más arriesgado usar está configuración ya que se aumenta considerablemente el riesgo de colisión al atravesar una puerta, además las velocidades de vuelo más elevadas también empeoran la calidad de las estimaciones del módulo de percepción, lo que aumenta aún más el riesgo de colisión. Los errores de seguimiento más elevados se encuentran entre los cambios en las trayectorias a corto plazo, debido a la discontinuidad existente entre las referencias enviadas al controlador.
 
-En ambos casos los módulos de generación de trayectorias son capaces de generar trayectorias a corto y largo plazo adecuadas y de actualizarlas a altas frecuencias con las nuevas mediciones obtenidas por el módulo de percepción, consiguiendo que la aeronave sea capaz de recorrer el circuito de forma satisfactoria a velocidades muy elevadas.
+En ambos casos los módulos de generación de trayectorias son capaces de generar trayectorias a corto y largo plazo adecuadas y de actualizarlas a altas frecuencias con las nuevas mediciones obtenidas por el módulo de percepción, consiguiendo que el aeronave sea capaz de recorrer el circuito de forma satisfactoria a velocidades muy elevadas.
 Asimismo, el cuadricóptero tardo menos de 35 segundos en completar el circuito en ambos casos, lo que estaría dentro de los tiempos que consiguieron los 3 mejores obtenidos en las pruebas clasificatorias del AlphaPilot 2019 \cite{guerra2019flightgoggles}. Sin embargo, a diferencia de las pruebas de la competición, en este trabajo se ha empleado la estimación de estado provista por el simulador, mientras que en las pruebas oficiales el módulo de percepción también debe ser implementado. 
 
 

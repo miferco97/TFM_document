@@ -45,7 +45,7 @@ Con estas condiciones de contorno se calcula la trayectoria óptima para pasar d
 
 
 \section{Trayectorias continuas a trozos}
-Para generar trayectorias que el cuadricóptero deba seguir para completar el circuito es conveniente contar con puntos de paso (\textit{waypoints}) por los que se quiere que pase la aeronave, por ejemplo, el centro de las puertas (Figura \ref{TrajCont}).
+Para generar trayectorias que el cuadricóptero deba seguir para completar el circuito es conveniente contar con puntos de paso (\textit{waypoints}) por los que se quiere que pase el aeronave, por ejemplo, el centro de las puertas (Figura \ref{TrajCont}).
 
 
 \begin{figure}[htb!]
@@ -68,7 +68,7 @@ Como se puede observar en el apartado anterior, las trayectorias que se generan 
 	\right.
 \end{equation}
 
-siendo $a_{ij}\in \mathbb{R}$ los coeficientes de los polinomios. El grado $q$ de estos polinomios dependerá del índice a minimizar durante el transcurso de la trayectoria, como se ha explicado en el apartado \ref{trajectoriasoptimas:cap}. Cada tramo tiene un tiempo inicial y un tiempo final, estos tiempos dependen de las limitaciones físicas de la aeronave, es decir, de su velocidad y aceleración máximas, en el apartado \ref{sec:estimacion_tiempos} se profundiza en la forma de generar estos tramos temporales.
+siendo $a_{ij}\in \mathbb{R}$ los coeficientes de los polinomios. El grado $q$ de estos polinomios dependerá del índice a minimizar durante el transcurso de la trayectoria, como se ha explicado en el apartado \ref{trajectoriasoptimas:cap}. Cada tramo tiene un tiempo inicial y un tiempo final, estos tiempos dependen de las limitaciones físicas del aeronave, es decir, de su velocidad y aceleración máximas, en el apartado \ref{sec:estimacion_tiempos} se profundiza en la forma de generar estos tramos temporales.
 
 De cara a resolver el valor de los distintos coeficientes de cada segmento polinomial se emplearán unas condiciones de contorno que garanticen la derivabilidad de la trayectoria completa en las $q$ primeras derivadas. 
 
@@ -88,11 +88,11 @@ Si se considera una trayectoria completa a través de $n$ \textit{waypoints} $P$
 
 \section{Estimación de tiempos}\label{sec:estimacion_tiempos}
 
-El objetivo final es generar trayectorias a través del circuito de forma que la aeronave sea capaz de recorrerlas teniendo en cuenta restricciones de posición, velocidad y aceleración. En los dos apartados anteriores se explica como generar trayectorias óptimas teniendo en cuentas restricciones de posición, fijando los \textit{waypoints} por los que se desea que pase el cuadricóptero. Sin embargo, para poder generar trayectorias es también necesario elegir los segmentos temporales $T_i$ entre los distintos puntos de paso, es decir, los tiempos que debe tardar la aeronave en pasar entre los distintos waypoints. Estos segmentos de tiempo deben tener en cuenta las limitaciones de velocidad y acceleración máximas de la aeronave, para poder generar trayectorias realizables. A continuación se tratará un posible método para establecer la duración de estos intervalos temporales.
+El objetivo final es generar trayectorias a través del circuito de forma que el aeronave sea capaz de recorrerlas teniendo en cuenta restricciones de posición, velocidad y aceleración. En los dos apartados anteriores se explica como generar trayectorias óptimas teniendo en cuentas restricciones de posición, fijando los \textit{waypoints} por los que se desea que pase el cuadricóptero. Sin embargo, para poder generar trayectorias es también necesario elegir los segmentos temporales $T_i$ entre los distintos puntos de paso, es decir, los tiempos que debe tardar el aeronave en pasar entre los distintos waypoints. Estos segmentos de tiempo deben tener en cuenta las limitaciones de velocidad y acceleración máximas del aeronave, para poder generar trayectorias realizables. A continuación se tratará un posible método para establecer la duración de estos intervalos temporales.
 
 \subsubsection{Aproximación al tiempo medio}
 
-La forma más sencilla de establecer intervalos temporales es basarse en la distancia existente entre un par de waypoints y la velocidad media a la que se desea que vuele la aeronave para estimar el tiempo necesario. Siendo $d_i = || W_{i-1} , W_{i} ||_2 $ la distancia entre dos \textit{waypoints} consecutivos y $v_m$ la velocidad media de vuelo, se puede establecer la duración de un segmento $S_i$ como
+La forma más sencilla de establecer intervalos temporales es basarse en la distancia existente entre un par de waypoints y la velocidad media a la que se desea que vuele el aeronave para estimar el tiempo necesario. Siendo $d_i = || W_{i-1} , W_{i} ||_2 $ la distancia entre dos \textit{waypoints} consecutivos y $v_m$ la velocidad media de vuelo, se puede establecer la duración de un segmento $S_i$ como
 \begin{align}
 	T_i = \frac{d_i}{v_m}
 \end{align}

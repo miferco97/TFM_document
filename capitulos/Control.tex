@@ -9,7 +9,7 @@ Un cuadricóptero es un robot aéreo con 6 grados de libertad (3 rotacionales y 
 	\label{modelado:uav_coordinate}
 \end{figure}
 
-Como puede observar en la figura \ref{modelado:uav_coordinate}, se ha  empleado el subíndice $W$ para hacer referencia al sistema de referencia del mundo, así como el subíndice $B$ para referirse al sistema asociado al cuerpo del cuadricóptero. El \textit{frame} $B$ posee su origen $O_B$ en el centro de masas de la aeronave, con el eje $x_B$ coincidente con la dirección de avance preferente de la aeronave.
+Como puede observar en la figura \ref{modelado:uav_coordinate}, se ha  empleado el subíndice $W$ para hacer referencia al sistema de referencia del mundo, así como el subíndice $B$ para referirse al sistema asociado al cuerpo del cuadricóptero. El \textit{frame} $B$ posee su origen $O_B$ en el centro de masas del  aeronave, con el eje $x_B$ coincidente con la dirección de avance preferente del aeronave.
 
 Para modelar las rotaciones del \textit{frame} $B$ con respecto a $W$ se emplearán los ángulos de Euler Z-X-Y, es decir, la matriz de rotación $R$ para transformar coordenadas desde $B$ a $W$ consiste en la composición de las siguientes rotaciones:
 \begin{equation}
@@ -93,8 +93,7 @@ Como se puede observar en la expresión anterior, el movimiento del cuadricópte
 \end{equation}
 donde $\mathbf{I} \in \mathbb{R}^{3\times 3}$ representa el tensor de inercia del cuadricóptero en el sistema $B$, y $\Omega  = [p, q, r]$ representa el vector de velocidad angular de $B$ respecto $W$. 
 
-Si denotamos $M_c = [\tau_x, \tau_y, \tau_z]^t$ como el momento total del cuadricóptero en el sistema $B$
-
+Si denotamos $M_c = [\tau_x, \tau_y, \tau_z]^t$ como el momento total ejercicdo sobre el cuadricóptero en el sistema $B$:
 \begin{align}
 	M_c &= \frac{d}{dt}H\nonumber\\
 		&= \mathbf{I}\dot{\Omega}+\Omega\times\mathbf{I}\Omega
@@ -251,7 +250,7 @@ En este capítulo se desarrollará la teoría general para el control de un cuad
 El problema del control se puede expresar como: 
 Dado el estado del sistema $\mathbf{x}(t)$, la señal de entrada al sistema $\mathbf{u}(t)$ y el modelo dinámico del sistema $ \mathbf{\dot x}(t) = f(\mathbf{x}(t),\mathbf{u}(t))$, el objetivo del control es encontrar la función $\mathbf{u}(t)$ tal que, el estado $\mathbf{x}(t)$ sigue la trayectoria deseada $\mathbf{\Gamma}(t)$ a lo largo del tiempo.
 
- Como se observo en el apartado \ref{diffFlat}, las trayectorias deseadas $\mathbf{\Gamma}(t)$ constarán de 12 componentes : las 3 coordenadas correspondientes a la posición tridimensional deseada de la aeronave y el ángulo de yaw deseado, así como la primera y la segunda derivada de las mismas. Es por esto que si consideramos $\mathbf{\sigma}_{T}(t) = [x_{T},y_{T},z_{T}, \psi_{T}]^t$, entonces las trayectorias deseadas son de la forma:
+ Como se observo en el apartado \ref{diffFlat}, las trayectorias deseadas $\mathbf{\Gamma}(t)$ constarán de 12 componentes : las 3 coordenadas correspondientes a la posición tridimensional deseada del aeronave y el ángulo de yaw deseado, así como la primera y la segunda derivada de las mismas. Es por esto que si consideramos $\mathbf{\sigma}_{T}(t) = [x_{T},y_{T},z_{T}, \psi_{T}]^t$, entonces las trayectorias deseadas son de la forma:
  
  \begin{equation}
  	\mathbf{\Gamma} = \begin{bmatrix}
@@ -298,7 +297,7 @@ Si llamamos $\mathbf{q}$ al vector de configuración formado por las 6 primeras 
 	\mathbf{x}(t) &= \left[\mathbf{q} \;\; \mathbf{\dot{q}}\right]^t
 \end{align}
 
-Para el control de la aeronave se han definido dos señales de entrada $\mathbf{u_1}$ y $\mathbf{u_2}$ siendo 
+Para el control del aeronave se han definido dos señales de entrada $\mathbf{u_1}$ y $\mathbf{u_2}$ siendo 
 \begin{align}
 	\mathbf{u_1}  &= F =  F_1 +F_2 +F_3 +F_4  \label{eq:u1}\\
 	\mathbf{u_2}  &= \begin{bmatrix} \tau_x\\ 
@@ -310,7 +309,7 @@ Para el control de la aeronave se han definido dos señales de entrada $\mathbf{
 	M_1 - M_2 + M_3 - M_4
 \end{bmatrix}
 \end{align} 
-como se puede observar la señal de control $u_1$ actúa sobre el empuje total de la aeronave en el eje $z_B$ mientras la señal $u_2$ controla los momentos totales aplicados sobre el cuadricóptero. Los pares $M_i$ que ejerce cada motor se relacionan con $F_i$ de la forma $M_i = \gamma F_i$, siendo $\gamma$ una constante aerodinámica dependiente de las hélices empleadas. De esta forma se puede expresar $u_2$ de la siguiente forma:
+como se puede observar la señal de control $u_1$ actúa sobre el empuje total del aeronave en el eje $z_B$ mientras la señal $u_2$ controla los momentos totales aplicados sobre el cuadricóptero. Los pares $M_i$ que ejerce cada motor se relacionan con $F_i$ de la forma $M_i = \gamma F_i$, siendo $\gamma$ una constante aerodinámica dependiente de las hélices empleadas. De esta forma se puede expresar $u_2$ de la siguiente forma:
 
 \begin{align}
 	\mathbf{u_2}  &= \begin{bmatrix}
@@ -337,7 +336,7 @@ La arquitectura de control general consiste en dos controladores anidados: un co
 
 
 \section{Controlador para ángulos pequeños}
-Cuando las trayectorias que el cuadricóptero son poco agresivas se puede linealizar el modelo del cuadricóptero entorno a su punto de equilibrio. En la situación de equilibrio el cuadricóptero se encuentra en \textit{hover}, es decir manteniendo la posición en el aire . En \textit{hover} el estado $x_0$ de la aeronave es de la forma 
+Cuando las trayectorias que el cuadricóptero son poco agresivas se puede linealizar el modelo del cuadricóptero entorno a su punto de equilibrio. En la situación de equilibrio el cuadricóptero se encuentra en \textit{hover}, es decir manteniendo la posición en el aire . En \textit{hover} el estado $x_0$ del aeronave es de la forma 
 \begin{align}
 	\mathbf{x}_0 &= [\mathbf{q}_0 \;\; 0]^t\nonumber\\
 	\mathbf{q}_0 &= [x_0  \;\;y_0  \;\;z_0  \;\;0  \;\;0  \;\;\psi_0  \;]^t
@@ -429,9 +428,9 @@ Como el angulo de \textit{yaw} $\psi_T(t)$ se incluye en la trayectoria definida
 Con esto se consigue obtener la señal de control $\mathbf{u_1}$ así como las referencias del controlador angular $\phi^{des}$, $\theta^{des}$ y $\psi^{des}$.
 
 \section{Controlador para ángulos grandes}
-A continuación se presenta un controlador que no parte de la premisa de que el estado de la aeronave es cercano al de equilibrio, sino que parte de la dinámica diferencialmente plana del cuadricóptero (apartado \ref{diffFlat}), lo que permite seguir trayectorias suaves de la forma $\mathbf{\Gamma}^{des}(t)$.
+A continuación se presenta un controlador que no parte de la premisa de que el estado del aeronave es cercano al de equilibrio, sino que parte de la dinámica diferencialmente plana del cuadricóptero (apartado \ref{diffFlat}), lo que permite seguir trayectorias suaves de la forma $\mathbf{\Gamma}^{des}(t)$.
 
-El objetivo de este controlador es orientar el vector $\mathbf{z}_B$ de la aeronave con la dirección de la fuerza necesaria $\mathbf{F}_{des}$ para poder aplicar la fuerza de la forma más conveniente para seguir la trayectoria.
+El objetivo de este controlador es orientar el vector $\mathbf{z}_B$ del aeronave con la dirección de la fuerza necesaria $\mathbf{F}_{des}$ para poder aplicar la fuerza de la forma más conveniente para seguir la trayectoria.
 \begin{figure}[htb!]
 	\centering
 	\includegraphics[width=0.75\textwidth]{imagenes/control2}
@@ -445,19 +444,19 @@ La fuerza deseada $\mathbf{F}_{des}$ en cada instante de tiempo viene dada por l
 	\mathbf{F}_{des} = -K_p	\mathbf{e}_p - K_v	\mathbf{e}_v - mg	\mathbf{z}_W + m	\mathbf{\ddot r}_T
 \end{equation}
 donde $K_p$ y $K_v$ son matrices definidas positivas.
-Como se puede observar, la fuerza debe tener en cuenta el peso de la aeronave, la aceleración impuesta por la trayectoria en ese instante y el error de seguimiento de la trayectoria en ese instante para poder corregirlo.
+Como se puede observar, la fuerza debe tener en cuenta el peso del aeronave, la aceleración impuesta por la trayectoria en ese instante y el error de seguimiento de la trayectoria en ese instante para poder corregirlo.
 
 Al proyectar $\mathbf{F}_{des}$ sobre el eje $x_B$ del cuadricóptero se puede obtener $u_1$, por lo que:
 \begin{equation}
 	\mathbf{u_1}_{,des} = \mathbf{F}_{des}\cdot \mathbf{z}_B
 \end{equation}
 
-Las otras tres señales de control del sistema dependen de la orientación de la aeronave. El objetivo es alinear el eje $\mathbf{z}_B$ de la aeronave con la dirección de la fuerza deseada $\mathbf{z}_{B,des}$, es decir, que la matriz de rotacion $R_{des}$ viene dada por:
+Las otras tres señales de control del sistema dependen de la orientación del aeronave. El objetivo es alinear el eje $\mathbf{z}_B$ del aeronave con la dirección de la fuerza deseada $\mathbf{z}_{B,des}$, es decir, que la matriz de rotacion $R_{des}$ viene dada por:
 \begin{align}	
 	R_{des}\mathbf{e_3} = \mathbf{z}_{B,des}\;,\quad 
 \mathbf{z}_{B,des} = \frac{\mathbf{F}_{des}}{||\mathbf{F}_{des}||}
 \end{align}
-siendo $\mathbf{e_3}$ el vector director del eje $z_B$ de la aeronave respecto al sistema $B$, es decir, $\mathbf{e_3} = [0, 0, 1]^t$.
+siendo $\mathbf{e_3}$ el vector director del eje $z_B$ del aeronave respecto al sistema $B$, es decir, $\mathbf{e_3} = [0, 0, 1]^t$.
 Debido a que el ángulo de yaw $\psi_T$ viene dado por la trayectoria se pueden calcular los vectores de rotación deseados de la forma:
 \begin{gather}
 	\mathbf{x}_{C,des} = [cos\, \psi_T , sin \psi_T, 0]^t\\
@@ -473,15 +472,15 @@ por lo que la matriz $R_{des} \in SO(3)$ se expresa como:
 	\end{bmatrix}
 \end{equation}
 
-Siendo $R$ la matriz de rotación correspondiente al estado actual de la aeronave, definiremos el error en orientación $\mathbf{e}_R $ como:
+Siendo $R$ la matriz de rotación correspondiente al estado actual del aeronave, definiremos el error en orientación $\mathbf{e}_R $ como:
 \begin{equation}
 	\mathbf{e}_R = \frac{1}{2}\left(R_{des}^t R - R^t R_{des} \right)^\vee
 \end{equation}
-donde $\vee$ denota el \textit{vee map}, una aplicación que transforma elementos de $SO(3) \rightarrow \mathbb{R}^3$. El error de velocidad angular es simplemente la diferencia entre la velocidad angular de la aeronave y la velocidad angular deseada, ambas medidas con respecto las coordenadas del sistema de coordenadas del cuadricóptero $B$.
+donde $\vee$ denota el \textit{vee map}, una aplicación que transforma elementos de $SO(3) \rightarrow \mathbb{R}^3$. El error de velocidad angular es simplemente la diferencia entre la velocidad angular del aeronave y la velocidad angular deseada, ambas medidas con respecto las coordenadas del sistema de coordenadas del cuadricóptero $B$.
 \begin{equation}
 	\mathbf{e}_\omega = \null^B[\omega]-\null^B[\omega_T] 
 \end{equation}
-Finalmente, las tres señales de salida restantes, correspondientes con los pares ejercidos sobre la aeronave, se calculan como:
+Finalmente, las tres señales de salida restantes, correspondientes con los pares ejercidos sobre el aeronave, se calculan como:
 
 \begin{equation}
 	\label{eq:u2_non_linearized}\mathbf{u_2}=
@@ -493,7 +492,8 @@ Finalmente, las tres señales de salida restantes, correspondientes con los pare
 donde $K_R$ y $K_\omega$ son matrices definidas positivas. Este controlador presenta dos ventajas considerables con respecto al controlador anterior:
 \begin{enumerate}
 	\item El error en orientación está expresado mediante matrices de rotación y no mediante ángulos de Euler, los cuales presentan una singularidad en torno a $\theta = 90º$ conocida como \textit{gimbal lock}.
-	\item La fuerza deseada se proyecta sobre el vector $z_B$ de la aeronave en el instante actual, en lugar de considerar que éste siempre apunta verticalmente, por lo que mejora notablemente el control en trajectorias agresivas, donde la aeronave presenta una gran inclinación.
+	\item La fuerza deseada se proyecta sobre el vector $z_B$ del aeronave en el instante actual, en lugar de considerar que éste siempre apunta verticalmente, por lo que mejora notablemente el control en trayectorias agresivas, donde el
+	aeronave presenta una gran inclinación.
 \end{enumerate}
 
 %\tb{hablar de la estabilidad y robustez del sistema}
@@ -511,10 +511,10 @@ En los controladores anteriores las señales de salida están directamente relac
 
 
 
-El controlador interno del cuadricóptero tiene como consignas a seguir las velocidades angulares del cuadrícoptero deseadas, así como el empuje total que deben proporcionar los motores. Estas son las señales que envían los pilotos de carreras de drones profesionales a través de sus mandos, debido al gran control que tienen de la aeronave. Al poder controlar el empuje total de la aeronave, la señal $u_1$ se mantiene igual que en los controladores anteriores, sin embargo es necesario realizar algunas pequeñas modificaciones en los controladores angulares. Las otras 3 señales de control que se van a emplear son las referencias del controlador interno $p_{ref}$,$q_{ref}$ y $r_{ref}$.
+El controlador interno del cuadricóptero tiene como consignas a seguir las velocidades angulares del cuadrícoptero deseadas, así como el empuje total que deben proporcionar los motores. Estas son las señales que envían los pilotos de carreras de drones profesionales a través de sus mandos, debido al gran control que tienen del aeronave. Al poder controlar el empuje total del aeronave, la señal $u_1$ se mantiene igual que en los controladores anteriores, sin embargo es necesario realizar algunas pequeñas modificaciones en los controladores angulares. Las otras 3 señales de control que se van a emplear son las referencias del controlador interno $p_{ref}$,$q_{ref}$ y $r_{ref}$.
 
 \subsubsection{Modificaciones para ángulos pequeños}
-Como se puede observar en la expresión \ref{eq:u2_linearized},  el controlador angular es un control PD que depende de la orientación actual de la aeronave y de la orientación deseada. Dado que el objetivo es minimizar ese error de orientación, podemos expresar el controlador angular como:
+Como se puede observar en la expresión \ref{eq:u2_linearized},  el controlador angular es un control PD que depende de la orientación actual del aeronave y de la orientación deseada. Dado que el objetivo es minimizar ese error de orientación, podemos expresar el controlador angular como:
 
 \begin{align}
 	\mathbf{u_2} =
