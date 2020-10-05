@@ -43,14 +43,14 @@ Todos los algoritmos desarrollados se han implementado en C++17 haciendo uso tan
 Para facilitar el ajuste de las ganancias de los distintos controladores se ha empleado la librería de ROS \textit{dynamic reconfigure}. Esta librería permite variar el valor de distintos parámetros en tiempo de ejecución, lo que facilita enormemente el ajuste fino de los parámetros de los controladores. 
 \begin{figure}[htb!]
 	\centering
-	\includegraphics[width=0.67\textwidth]{imagenes/Rqt}
+	\includegraphics[width=0.9\textwidth]{imagenes/Rqt}
 	\caption{Ventana de configuración \textit{dynamic reconfigure}}
 	\label{waypoints:circuito}
 \end{figure}
 
 
 
-\newpage
+
 \subsection{Módulo de generación de trayectorias}
 
 Dado que las dos trayectorias generadas, la de corto y la de largo plazo, se generan empleando \textit{splines} se ha unificado el algoritmo de generación en una clase común a ambos módulos. Aunque al comienzo del proyecto se empleo una implementación propia de estos algoritmos, finalmente se ha optado por emplear la implementación realizada por la ETHZ (disponibles para la comunidad robótica en \url{https://github.com/ethz-asl/mav_trajectory_generation}) debido a que alcanzaban una mayor eficacia en la generación de las mismas.

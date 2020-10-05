@@ -249,33 +249,23 @@ Para concluir se calcula la componente $\dot{r}$ de la aceleración angular de f
 En este capítulo se desarrollará la teoría general para el control de un cuadricóptero \cite{MinimunSnap2011}\cite{mahony2012multirotor}\cite{amir2008modeling}\cite{mellinger2012trajectory}, la cual se adaptará posteriormente al caso particular de la arquitectura empleada.
 
 El problema del control se puede expresar como: 
-Dado el estado del sistema $\mathbf{x}(t)$, la señal de entrada al sistema $\mathbf{u}(t)$ y el modelo dinámico del sistema $ \mathbf{\dot x}(t) = f(\mathbf{x}(t),\mathbf{u}(t))$, el objetivo del control es encontrar la función $\mathbf{u}(t)$ tal que, el estado $\mathbf{x}(t)$ sigue la trayectoria deseada $\mathbf{\Gamma}^{des}(t)$ a lo largo del tiempo.
+Dado el estado del sistema $\mathbf{x}(t)$, la señal de entrada al sistema $\mathbf{u}(t)$ y el modelo dinámico del sistema $ \mathbf{\dot x}(t) = f(\mathbf{x}(t),\mathbf{u}(t))$, el objetivo del control es encontrar la función $\mathbf{u}(t)$ tal que, el estado $\mathbf{x}(t)$ sigue la trayectoria deseada $\mathbf{\Gamma}(t)$ a lo largo del tiempo.
 
- Como se observo en el apartado \ref{diffFlat}, las trayectorias deseadas $\mathbf{\Gamma}^{des}(t)$ constarán de 12 componentes : las 3 coordenadas correspondientes a la posición tridimensional deseada de la aeronave y el ángulo de yaw deseado, así como la primera y la segunda derivada de las mismas. Es por esto que si consideramos $\mathbf{\sigma}_{des}(t) = [x_{des},y_{des},z_{des}, \psi_{des}]^t$, entonces las trayectorias deseadas son de la forma:
+ Como se observo en el apartado \ref{diffFlat}, las trayectorias deseadas $\mathbf{\Gamma}(t)$ constarán de 12 componentes : las 3 coordenadas correspondientes a la posición tridimensional deseada de la aeronave y el ángulo de yaw deseado, así como la primera y la segunda derivada de las mismas. Es por esto que si consideramos $\mathbf{\sigma}_{T}(t) = [x_{T},y_{T},z_{T}, \psi_{T}]^t$, entonces las trayectorias deseadas son de la forma:
  
  \begin{equation}
- 	\mathbf{\Gamma}^{des} = \begin{bmatrix}
- 		\mathbf{\sigma}_{des}(t)\\
- 		\mathbf{\dot \sigma}_{des}(t)\\
- 		\mathbf{\ddot \sigma}_{des}(t)
+ 	\mathbf{\Gamma} = \begin{bmatrix}
+ 		\mathbf{\sigma}_{T}(t)\\
+ 		\mathbf{\dot \sigma}_{T}(t)\\
+ 		\mathbf{\ddot \sigma}_{T}(t)
  	\end{bmatrix}
  \end{equation}
 
 
-Si se define el error de posición $\mathbf{e_p}(t)$ y el error de velocidad $\mathbf{e_v}(t)$ del controlador como:
+Considerando $\mathbf{r} = [x,y,z]^t$, se define el error de posición $\mathbf{e_p}(t)$ y el error de velocidad $\mathbf{e_v}(t)$ del controlador como:
 \begin{equation}
-	\mathbf{e_p}(t) = \mathbf{\sigma}_{des}(t) -\begin{bmatrix}
-		x(t)\\
-		y(t)\\
-		z(t)\\
-		\psi(t)
-	\end{bmatrix} \quad;\quad 
-\mathbf{e_v}(t) = \mathbf{\dot \sigma}_{des}(t) -\begin{bmatrix}
-	\dot x(t)\\
-	\dot y(t)\\
-	\dot z(t)\\
-	\dot \psi(t)
-\end{bmatrix}
+	\mathbf{e_p}(t) = \mathbf{r}_{T}(t) - \mathbf{r}(t) \quad;\quad 
+\mathbf{e_v}(t) = \mathbf{\dot r}_{T}(t) - \mathbf{\dot r}(t)
 \end{equation}
 el objetivo del controlador sería conseguir que los errores $\mathbf{e_p}(t)$ y $\mathbf{e_v}(t)$ converjan de forma exponencial a 0.
 
@@ -334,16 +324,23 @@ como se puede observar la señal de control $u_1$ actúa sobre el empuje total d
 \end{bmatrix}\label{eq:u2}
 \end{align} 
 
-La arquitectura de control general consiste en dos controladores anidados: un controlador de posición y un controlador de orientación, como se puede observar en la figura .\tb{incluir diagrama}
+La arquitectura de control general consiste en dos controladores anidados: un controlador de posición y un controlador de orientación, como se puede observar en la figura \ref{control:1}.
 
 
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{imagenes/diagramaControl1}
+	\caption{Esquema general de control de un cuadricóptero. En azul se muestran los módulos internos a los que no se puede acceder. }
+	\label{control:1}
+\end{figure}
 
 
 \section{Controlador para ángulos pequeños}
 Cuando las trayectorias que el cuadricóptero son poco agresivas se puede linealizar el modelo del cuadricóptero entorno a su punto de equilibrio. En la situación de equilibrio el cuadricóptero se encuentra en \textit{hover}, es decir manteniendo la posición en el aire . En \textit{hover} el estado $x_0$ de la aeronave es de la forma 
 \begin{align}
-	x_0 &= [q_0 \;\; 0]^t\nonumber\\
-	q_0 &= [x_0  \;\;y_0  \;\;z_0  \;\;0  \;\;0  \;\;\psi_0  \;]^t
+	\mathbf{x}_0 &= [\mathbf{q}_0 \;\; 0]^t\nonumber\\
+	\mathbf{q}_0 &= [x_0  \;\;y_0  \;\;z_0  \;\;0  \;\;0  \;\;\psi_0  \;]^t
 \end{align}
 Como los ángulos $\phi$ y $\theta$ son pequeños se puede aproximar $cos(\phi) \approx 1 , cos(\theta) \approx 1$ y $sen(\phi) \approx \phi , sen(\theta) \approx \theta$. En este estado de equilibrio la fuerza total que ejercen los motores debe ser igual al peso del cuadricóptero por lo que:
 \begin{equation}
@@ -358,24 +355,32 @@ Al desglosar y linealizar las ecuaciones \ref{analisis:eq2} entorno a este estad
 \end{align}
 
 \subsubsection{Controlador en ángulo}
-Por otro lado, para obtener las ecuaciones que permiten controlar la rotación del cuadricóptero debemos desarrollar las ecuaciones \ref{model:rot_eq}. Debido a la simetría del cuadricóptero se considera que $I_{xx} \approx I_{yy}$, con lo que se obtienen las ecuaciones del movimiento rotacional:
+Por otro lado, para obtener las ecuaciones que permiten controlar la rotación del cuadricóptero debemos desarrollar las ecuaciones \ref{model:rot_eq}. Debido a la simetría del cuadricóptero se considera que $I_{xx} \approx I_{yy}$, con lo que, al linealizar entorno al punto de equilibrio, se obtienen las ecuaciones del movimiento rotacional:
 \begin{align}
-	I_ {xx} \dot p &= u_2 - qr(I_{zz}-I_{yy})\nonumber\\
-	I_ {yy} \dot q &= u_3 - pr(I_{xx}-I_{zz})\label{eq:control2}\\
-	I_ {zz} \dot r &= u_4\nonumber
+	I_ {xx} \dot p &= 	\tau_x - qr(I_{zz}-I_{yy})\nonumber\\
+	I_ {yy} \dot q &= 	\tau_y - pr(I_{xx}-I_{zz})\label{eq:control2}\\
+	I_ {zz} \dot r &= 	\tau_z \nonumber
 \end{align}
 Se puede asumir que la componente r es pequeña por lo que los productos de esta con otros términos, también son pequeños en comparación con el resto de términos. Además, en el estado de \textit{hover} $\dot{\phi}\approx p$, $\dot{\theta}\approx q$ y $\dot{\psi}\approx r$. Es por esto que la expresión anterior se puede simplificar por:
 \begin{align}
-	\dot p &= \frac{u_2}{I_ {xx}} \nonumber\\
-	\dot q &= \frac{u_3}{I_ {yy}}\label{eq:control3}\\
-	\dot r &= \frac{u_4}{I_ {zz}}\nonumber
+	\dot p &= \frac{\tau_x}{I_ {xx}} \nonumber\\
+	\dot q &= \frac{\tau_y}{I_ {yy}}\label{eq:control3}\\
+	\dot r &= \frac{\tau_z}{I_ {zz}}\nonumber
 \end{align}
 Gracias a esto es posible expresar el valor de las acciones de control $\mathbf{u_2}$ como:
 \begin{align}
 	\label{eq:u2_linearized}
-	u_{2,des} &= k_{p,\phi}(\phi^{des}-\phi) + k_{d,\phi}(p^{des}-p)\\
-	u_{3,des} &= k_{p,\theta}(\theta^{des}-\theta) + k_{d,\theta}(q^{des}-q)\\
-	u_{4,des} &= k_{p,\psi}(\psi^{des}-\psi) + k_{d,\psi}(r^{des}-r)
+	\mathbf{u_2} =
+	\begin{bmatrix}
+\tau_x \\
+\tau_y \\
+\tau_z 
+	\end{bmatrix}=
+	\begin{bmatrix}
+	k_{p,\phi}(\phi^{des}-\phi) + k_{d,\phi}(p^{des}-p)\\
+	k_{p,\theta}(\theta^{des}-\theta) + k_{d,\theta}(q^{des}-q)\\
+	k_{p,\psi}(\psi^{des}-\psi) + k_{d,\psi}(r^{des}-r)		
+\end{bmatrix}
 \end{align}
 
 En el estado de hover,las velocidades de roll y pitch son cero por lo que $p_{des} = 0\;, q_{des} = 0$.
@@ -389,15 +394,15 @@ En cuanto al tipo de controlador en posición se ha decidido emplear un controla
 En un controlador PD el objetivo de seguir la trayectoria $r_T$ deseada es conseguir que la expresión \ref{pd:1} tienda a 0 en un tiempo exponencial:
 \begin{equation}
 	\label{pd:1}
-	\left(\ddot{r_T} - \ddot{r_c}\right) + K_d e_v + K_p e_p = 0
+	\left(\mathbf{\ddot{r}}_{T} - \mathbf{\ddot{r}}\right) + K_d \mathbf{e_v} + K_p \mathbf{e_p} = 0
 \end{equation}
-siendo $e_v = (\dot r_T - \dot r_c )$ y $e_p = (r_T - r_c )$. Las constantes $K_d,K_p \in \mathbb{R^+}$ del controlador definen la dinámica y la estabilidad del sistema.
+Las matrices  semidefinidas positivas $K_d,K_p \in \mathbb{R}^{3x3}$ del controlador definen la dinámica y la estabilidad del sistema.
 \\
 
 Desarrollando \ref{pd:1}:
 \begin{align}
 	\label{pd:2}
-	\ddot{r_c} = \ddot{r_T} + K_d e_v + K_p e_p
+	\mathbf{\ddot{r}}= \mathbf{\ddot{r}}_{T} + K_d \mathbf{e_v} + K_p \mathbf{e_p}
 \end{align}
 
 Al combinar \ref{eq:control1} con \ref{pd:2}:
@@ -405,14 +410,14 @@ Al combinar \ref{eq:control1} con \ref{pd:2}:
 		g (\Delta\theta\, cos \psi_0 + \Delta\phi\,sen\psi_0)\\
 		g(\Delta\theta\, sen \psi_0  - \Delta\phi\,cos\psi_0) \\
 		\frac{1}{m}\mathbf{u_1}-g
-	\end{bmatrix} 	= \ddot{r_T} + K_d e_v + K_p e_p
+	\end{bmatrix} 	= \mathbf{\ddot{r}}_T + K_d \mathbf{e_v} + K_p \mathbf{e_p}
 \end{align}
 
 por lo que :
 \begin{align}
-	\mathbf{u_1} &=m\left(g + \ddot{z_{des}}+ K_{d,z}(\dot{z_{des}}-\dot{z}) + K_{p,z}(z_{des}-z)\right)\\
-	\phi^{des} &= \frac{1}{g}\left(\ddot{x}_{des} sin\,\psi_T -\ddot{y}_{des} cos\,\psi_T \right)\\
-	\theta^{des} &= \frac{1}{g}\left(\ddot{x}_{des} cos\,\psi_T +\ddot{y}_{des} sin\,\psi_T \right)
+	\mathbf{u_1} &=m\left(g + \ddot{z}_T+ K_{d,z}(\dot{z}_T-\dot{z}) + K_{p,z}(z_T-z)\right)\\
+	\phi^{des} &= \frac{1}{g}\left(\ddot{x}_{T} sin\,\psi_T -\ddot{y}_{T} cos\,\psi_T \right)\\
+	\theta^{des} &= \frac{1}{g}\left(\ddot{x}_{T} cos\,\psi_T +\ddot{y}_{T} sin\,\psi_T \right)
 \end{align}
 
 Como el angulo de \textit{yaw} $\psi_T(t)$ se incluye en la trayectoria definida, entonces:
@@ -426,15 +431,14 @@ Con esto se consigue obtener la señal de control $\mathbf{u_1}$ así como las r
 \section{Controlador para ángulos grandes}
 A continuación se presenta un controlador que no parte de la premisa de que el estado de la aeronave es cercano al de equilibrio, sino que parte de la dinámica diferencialmente plana del cuadricóptero (apartado \ref{diffFlat}), lo que permite seguir trayectorias suaves de la forma $\mathbf{\Gamma}^{des}(t)$.
 
-El objetivo de este controlador es orientar el vector $z_B$ de la aeronave con la dirección de la fuerza necesaria $\mathbf{F}_{des}$ para poder seguir la trayectoria.
+El objetivo de este controlador es orientar el vector $\mathbf{z}_B$ de la aeronave con la dirección de la fuerza necesaria $\mathbf{F}_{des}$ para poder aplicar la fuerza de la forma más conveniente para seguir la trayectoria.
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=0.75\textwidth]{imagenes/control2}
+	\caption{Esquema simplificado de las fuerzas involucradas en el control, siendo la fuerza aplicada siempre colineal con el eje $\mathbf{z}_B$. }
+	\label{modelado:uav_coordinte}
+\end{figure}
 
-\tb{\large añadir diagrama}
-
-Para ello primero definiremos los errores en posición y velocidad:
-\begin{align}
-	\mathbf{e}_p &= \mathbf{r} -\mathbf{r}_T\\
-	\mathbf{e}_v &= \mathbf{\dot r} -\mathbf{\dot r}_T
-\end{align} 
 
 La fuerza deseada $\mathbf{F}_{des}$ en cada instante de tiempo viene dada por la expresión
 \begin{equation}
@@ -445,7 +449,7 @@ Como se puede observar, la fuerza debe tener en cuenta el peso de la aeronave, l
 
 Al proyectar $\mathbf{F}_{des}$ sobre el eje $x_B$ del cuadricóptero se puede obtener $u_1$, por lo que:
 \begin{equation}
-	u_1,des = \mathbf{F}_{des}\cdot \mathbf{z}_B
+	\mathbf{u_1}_{,des} = \mathbf{F}_{des}\cdot \mathbf{z}_B
 \end{equation}
 
 Las otras tres señales de control del sistema dependen de la orientación de la aeronave. El objetivo es alinear el eje $\mathbf{z}_B$ de la aeronave con la dirección de la fuerza deseada $\mathbf{z}_{B,des}$, es decir, que la matriz de rotacion $R_{des}$ viene dada por:
@@ -473,52 +477,70 @@ Siendo $R$ la matriz de rotación correspondiente al estado actual de la aeronav
 \begin{equation}
 	\mathbf{e}_R = \frac{1}{2}\left(R_{des}^t R - R^t R_{des} \right)^\vee
 \end{equation}
-donde $\vee$ denota el \tb{vee map} que transforma elementos de $SO(3)$ a $\mathbb{R}$. El error de velocidad angular es simplemente la diferencia entre la velocidad angular de la aeronave y la velocidad angular deseada, ambas medidas con respecto las coordenadas del sistema de coordenadas del cuadricóptero $B$.
+donde $\vee$ denota el \textit{vee map}, una aplicación que transforma elementos de $SO(3) \rightarrow \mathbb{R}^3$. El error de velocidad angular es simplemente la diferencia entre la velocidad angular de la aeronave y la velocidad angular deseada, ambas medidas con respecto las coordenadas del sistema de coordenadas del cuadricóptero $B$.
 \begin{equation}
 	\mathbf{e}_\omega = \null^B[\omega]-\null^B[\omega_T] 
 \end{equation}
 Finalmente, las tres señales de salida restantes, correspondientes con los pares ejercidos sobre la aeronave, se calculan como:
 
 \begin{equation}
-	\label{eq:u2_non_linearized}
+	\label{eq:u2_non_linearized}\mathbf{u_2}=
 \begin{bmatrix}
-	u_{2,des}\\u_{3,des}\\u_{4,des} 
+	\tau_x\\\tau_y\\\tau_z 
 \end{bmatrix}= -K_R	\mathbf{e}_R - K_\omega	\mathbf{e}_\omega
 \end{equation}
 
-Este controlador presenta dos ventajas considerables con respecto al controlador anterior:
+donde $K_R$ y $K_\omega$ son matrices definidas positivas. Este controlador presenta dos ventajas considerables con respecto al controlador anterior:
 \begin{enumerate}
 	\item El error en orientación está expresado mediante matrices de rotación y no mediante ángulos de Euler, los cuales presentan una singularidad en torno a $\theta = 90º$ conocida como \textit{gimbal lock}.
 	\item La fuerza deseada se proyecta sobre el vector $z_B$ de la aeronave en el instante actual, en lugar de considerar que éste siempre apunta verticalmente, por lo que mejora notablemente el control en trajectorias agresivas, donde la aeronave presenta una gran inclinación.
 \end{enumerate}
 
 %\tb{hablar de la estabilidad y robustez del sistema}
-\newpage
+
 \section{Adaptación del controlador al entorno simulado.}
 
 En los controladores anteriores las señales de salida están directamente relacionadas con la velocidad de giro de cada motor y de la fuerza de empuje que genera cada uno, como se puede observar en las expresiones \ref{eq:u1} y \ref{eq:u2}. Sin embargo, en la competición, no se tiene el control de cada motor de forma independientemente, si no que hay un controlador interno que controla los motores. Es por esto que, es necesario adaptar los controladores del estado del arte mostrados anteriormente al nuevo conjunto de señales de entrada disponibles.
 
-\tb{\Large Añadir diagrama nuevo}
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=\textwidth]{imagenes/diagramaControl2}
+	\caption{Esquema de control del cuadricóptero adaptado al entorno simulado. En azul se muestran los módulos internos a los que no se puede acceder. }
+	\label{control:2}
+\end{figure}
+
+
 
 El controlador interno del cuadricóptero tiene como consignas a seguir las velocidades angulares del cuadrícoptero deseadas, así como el empuje total que deben proporcionar los motores. Estas son las señales que envían los pilotos de carreras de drones profesionales a través de sus mandos, debido al gran control que tienen de la aeronave. Al poder controlar el empuje total de la aeronave, la señal $u_1$ se mantiene igual que en los controladores anteriores, sin embargo es necesario realizar algunas pequeñas modificaciones en los controladores angulares. Las otras 3 señales de control que se van a emplear son las referencias del controlador interno $p_{ref}$,$q_{ref}$ y $r_{ref}$.
 
 \subsubsection{Modificaciones para ángulos pequeños}
 Como se puede observar en la expresión \ref{eq:u2_linearized},  el controlador angular es un control PD que depende de la orientación actual de la aeronave y de la orientación deseada. Dado que el objetivo es minimizar ese error de orientación, podemos expresar el controlador angular como:
+
 \begin{align}
-	u_2 = p_{ref} &=  p_{des} + k_{p,\phi}(\phi^{des}-\phi)\\
-	u_3 = q_{ref} &=  q_{des} + k_{p,\theta}(\theta^{des}-\theta)\\
-	u_4 = r_{ref} &=  r_{des} + k_{p,\psi}(\psi^{des}-\psi)
+	\mathbf{u_2} =
+	\begin{bmatrix}
+		p_{ref} \\
+		q_{ref} \\
+		r_{ref} 
+	\end{bmatrix}=
+	\begin{bmatrix}
+		p_{des} + k_{p,\phi}(\phi^{des}-\phi)\\
+		q_{des} + k_{p,\theta}(\theta^{des}-\theta)\\
+		r_{des} + k_{p,\psi}(\psi^{des}-\psi)
+		\end{bmatrix}
 \end{align}
 
 
 \subsubsection{Modificaciones para ángulos grandes}
 Para el controlador para grandes ángulos se ha aplicado una estrategia similiar a la anterior. La expresión \ref{eq:u2_non_linearized} se ha modificado para que sea de la forma:
 \begin{equation}
+	\mathbf{u_2}=
 	\begin{bmatrix}
-		u_{2}\\u_{3}\\u_{4} 
-	\end{bmatrix}=\null^B[\omega] =  \null^B[\omega_T]    -K_R	\mathbf{e}_R  
+		p_{ref}\\
+		q_{ref}\\
+		r_{ref}
+	\end{bmatrix}=  \null^B[\omega_T]    -K_R	\mathbf{e}_R  
 \end{equation}
-\\
 
 Con estas pequeñas modificaciones se ha conseguido adaptar los controladores del estado del arte al interfaz provisto por el entorno de simulación que se empleará posteriormente en los experimentos.
 

@@ -45,9 +45,15 @@ Con estas condiciones de contorno se calcula la trayectoria óptima para pasar d
 
 
 \section{Trayectorias continuas a trozos}
-Para generar trayectorias que el cuadricóptero deba seguir para completar el circuito es conveniente contar con puntos de paso (\textit{waypoints}) por los que se quiere que pase la aeronave, por ejemplo, el centro de las puertas.
+Para generar trayectorias que el cuadricóptero deba seguir para completar el circuito es conveniente contar con puntos de paso (\textit{waypoints}) por los que se quiere que pase la aeronave, por ejemplo, el centro de las puertas (Figura \ref{TrajCont}).
 
-\tb{\large Añadir diagrama}
+
+\begin{figure}[htb!]
+	\centering
+	\includegraphics[width=0.7\textwidth]{imagenes/TrajCont}
+	\caption{Esquema del objetivo de la generación de trayectorias empleando como waypoints los centros de las puertas y la posición del aeronave.}
+	\label{TrajCont}
+\end{figure}
 
 Como se puede observar en el apartado anterior, las trayectorias que se generan entre dos puntos de paso $a$ y $b$, son trayectorias polinómicas cuyo grado depende del orden de la derivada de la acción de control. Debido a esto, se ha decidido usar trayectorias de tipo \textit{spline}, es decir, curvas diferenciables definidas en segmentos polinómicos, donde cada segmento sería una trayectoria entre dos \textit{waypoints}. Cada trayectoria completa, $r_d(t)$ está compuesta por $m$ segmentos de grado $q$, presentando la estructura
 
