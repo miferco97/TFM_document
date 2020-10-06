@@ -1,7 +1,7 @@
 \chapter{Introducción}
 
 
-El auge de los pequeños multirrotores no tripulados (comúnmente llamados drones) en diversos ámbitos ha crecido de forma exponencial durante estos últimos años. Se puede observar la presencia de estos drones en diversos ámbitos como: el industrial, para realizar inspecciones en lugares de difícil acceso o en lugares peligrosos, el cinematográfico, para grabar escenas aéreas, o para dispositivos de búsqueda y rescate, en los que se emplean para poder barrer grandes áreas en búsqueda de personas desaparecidas, entre otros. Además, dentro del mundo del entretenimiento las carreras de drones comienzan a hacerse un hueco en países como los Estados Unidos, donde las carreras de drones son un deporte que se retransmite en algunos canales de televisión. 
+El auge de los pequeños multirrotores no tripulados (comúnmente llamados drones) en diversos ámbitos ha crecido de forma exponencial durante estos últimos años. Se puede observar la presencia de estos drones en diversos ámbitos como: el industrial, para realizar inspecciones en lugares de difícil acceso o en lugares peligrosos, el cinematográfico, para grabar escenas aéreas, o para dispositivos de búsqueda y rescate, en los que se emplean para poder barrer grandes áreas en búsqueda de personas desaparecidas, entre otros. Además, dentro del mundo del entretenimiento, las carreras de drones comienzan a hacerse un hueco en países como los Estados Unidos, donde las carreras de drones son un deporte que se retransmite en algunos canales de televisión. 
 
 Actualmente, en la mayoría de estas competiciones, los drones están pilotados por un humano, aunque recientemente, empiezan a aparecer carreras de drones autónomos, en los que las aeronaves tienen que recorrer el circuito entero de forma autónoma sin la intervención de un humano. Algunos ejemplos de estas competiciones serían: la \textit{Autonomous Drone Race} (ADR), que se celebra anualmente dentro de la conferencia de robótica internacional  IROS, o más recientemente AlphaPilot, una carrera de drones autónomos organizada por la \textit{Drone Racing League} y la empresa \textit{Lockheed Martin} con un gran premio de 1 millón de dólares para el ganador.
 
@@ -13,7 +13,7 @@ Actualmente, en la mayoría de estas competiciones, los drones están pilotados 
 \end{figure}
 
 
-Actualmente, el rendimiento obtenido por los drones de carreras autónomos aún están lejos de alcanzar el de los pilotos humanos, es por esto que el afán por superar el nivel de los pilotos humanos es una motivación para los grupos de investigación por todo el mundo. El desarrollo de drones autónomos es un campo de estudio exigente que involucra el desarrollo de la tecnología existente en diversos campos de la robótica como: la estimación, el control, la generación de trayectorias o la percepción, entre otros. 
+Actualmente, el rendimiento obtenido por los drones de carreras autónomos aún está lejos de alcanzar el de los pilotos humanos. Es por esto que el afán por superar el nivel de los pilotos humanos es una motivación para los grupos de investigación por todo el mundo. El desarrollo de drones autónomos es un campo de estudio exigente que involucra el desarrollo de la tecnología existente en diversos campos de la robótica como: la estimación, el control, la generación de trayectorias o la percepción, entre otros. 
 
 \section{Motivación}
 
@@ -26,15 +26,15 @@ Los últimos avances en las plataformas de simulación enfocadas al desarrollo d
 
 
 \section{Solución propuesta}
-El objetivo propuesto consiste en diseñar una arquitectura de un sistema modular capaz de controlar un cuadrirrotor a través de un circuito de carreras de forma autónoma.
+El objetivo propuesto consiste en diseñar la arquitectura de un sistema modular capaz de controlar un cuadrirrotor a través de un circuito de carreras de forma autónoma.
 
-Debido a la gran complejidad que presenta el desarrollo completo de todos los módulos que intervienen en un dron de carreras autónomo, se han simplificado el desarrollo de los módulos de estimación de estado y de percepción del circuito, empleando datos provistos por el simulador. Es por esto que el trabajo se haya centrado en el desarrollo de la arquitectura del sistema y del desarrollo de los módulos de control y generación de trayectorias capaces de generar y seguir trayectorias agresivas a lo largo de todo el circuito un circuito de carreras simulado a altas velocidades con incertidumbre sobre el recorrido en sí.
+Debido a la gran complejidad que presenta el desarrollo completo de todos los módulos que intervienen en un dron de carreras autónomo, se han simplificado el desarrollo de los módulos de estimación de estado y de percepción del circuito, empleando datos provistos por el simulador. Es por esto que el trabajo se ha centrado en el desarrollo de la arquitectura del sistema y en el desarrollo de los módulos de control y generación de trayectorias, los cuales deben ser capaces de generar y seguir trayectorias agresivas a lo largo de todo el circuito a altas velocidades y con incertidumbre sobre el recorrido en sí.
 
-Para el algoritmo de control se han implementado dos controladores del estado del arte, un controlador para orientaciones del aeronave con ángulos pequeños y otro para grandes ángulos, y se ha comparado el rendimiento de ambos en el seguimiento de diversas trayectorias.
+Para el algoritmo de control se han implementado dos controladores del estado del arte, un controlador para orientaciones del aeronave con ángulos pequeños y otro para grandes ángulos y se ha comparado el rendimiento de ambos en el seguimiento de diversas trayectorias.
 
-En cuanto a la generación de trayectorias, se ha optado por generar trayectorias polinómicas óptimas de tipo \textit{spline}. Para poder mejorar la capacidad de reacción del aeronave ante cambios en el circuito se ha dividido la  generación de trayectorias en dos partes: la generación de una trayectoria completa a través de todo el circuito (largo plazo) y la generación de una trayectoria corta entorno a un horizonte temporal próximo a la posición del aeronave (corto plazo).
+En cuanto a la generación de trayectorias, se ha optado por generar trayectorias polinómicas óptimas de tipo \textit{spline}. Para poder mejorar la capacidad de reacción del aeronave ante cambios en el circuito se ha dividido la generación de trayectorias en dos partes: la generación de una trayectoria completa a través de todo el circuito (largo plazo) y la generación de una trayectoria corta entorno a un horizonte temporal próximo a la posición del aeronave (corto plazo).
 
-Para desarrollar los algoritmos y comparar el rendimiento del sistema realizado, se ha empleado el simulador FlightGoogles, empleado para las pruebas clasificatorias del AlphaPilot 2019 como entorno de pruebas.
+Para desarrollar los algoritmos y comparar el rendimiento del sistema realizado, se ha utilizado el simulador FlightGoogles, el cual fue empleado para las pruebas clasificatorias del AlphaPilot 2019 como entorno de pruebas.
 
 
 %Este sistema estará formado por 3 partes principales:

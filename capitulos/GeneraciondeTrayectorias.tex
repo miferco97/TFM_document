@@ -14,14 +14,14 @@ Cuando el objetivo es generar trayectorias suaves la forma de la expresión a op
 \begin{equation}
 	x^*(t) = \underset{x(t)}{argmin}\int_{0}^{T}\left(x^{(n)}\right)^2\, dt
 \end{equation}
-siendo $x^{(n)} = u $, la magnitud de control que se desea minimizar. El valor del parámetro $n\in\mathbb{N}$, expresa el grado de la derivada de la acción de control $u$, es decir, para generar trayectorias de mínima distancia, se empleará un valor de $n=1$, por lo que $u = \dot{x}$, mientras que para generar trayectorias de mínima sobreacceleración (\textit{jerk}) se empleara un valor de $n=3$, por lo que $u = \dddot{x}$.
+siendo $x^{(n)} = u $, la magnitud de control que se desea minimizar. El valor del parámetro $n\in\mathbb{N}$, expresa el grado de la derivada de la acción de control $u$, es decir, para generar trayectorias de mínima distancia, se empleará un valor de $n=1$, por lo que $u = \dot{x}$, mientras que para generar trayectorias de mínima sobreacceleración (\textit{jerk}) se empleará un valor de $n=3$, por lo que $u = \dddot{x}$.
 
 De forma general la expresión a optimizar será:
 	\begin{equation}
 		x^*(t) = \underset{x(t)}{argmin}\int_{0}^{T}\mathcal{L}\left(x^{(n)}, x^{(n-1)},...,\dot{x},x,t\right)\, dt
 	\end{equation}
 
-De la  ecuación de Euler-Lagrange se obtiene que la la función optima $x^*(t)$ debe satisfacer:
+De la  ecuación de Euler-Lagrange se obtiene que la la función ófptima $x^*(t)$ debe satisfacer:
 \begin{equation}
 	\frac{\partial\mathcal{L}}{\partial x} + \sum_{i=1}^{n}(-1)^i \frac{d^i}{dt^i}\left(\frac{\partial\mathcal{L}}{\partial x^i}\right)  = 0
 \end{equation}
