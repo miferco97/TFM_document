@@ -13,7 +13,7 @@ El desarrollo y validación del trabajo se realizará empleando el simulador y l
 \section*{Solución realizada}
 \begin{itemize}
 \item \textbf{Controlador:}
-Para conseguir que el cuadricóptero recorra el circuito a altas velocidades se han implementado dos controladores, uno linealizado en torno al punto de equilibrio, en los que la orientación del cuadricóptero varía un pequeño ángulo respecto al estado de hover y otro para cuando esta variación es de un gran ángulo.
+Para conseguir que el cuadricóptero recorra el circuito a altas velocidades se han implementado dos controladores, uno linealizado en torno al punto de equilibrio, en los que la orientación del cuadricóptero varía un pequeño ángulo respecto al estado de hover ($\phi,\theta  < \pi/6 $). y otro sin linealizar, para cuando esta variación es de un gran ángulo ($\phi,\theta  \ge \pi/6 $).
 
 \item \textbf{Generación de trayectorias:} Se ha dividido la generación de trayectorias en dos partes:
 Una trayectoria que abarca todo el recorrido del circuito y otra más corta dentro de un horizonte temporal próximo a la posición del cuadricóptero. Ambas son trayectorias óptimas, generadas por \textit{splines}.

@@ -25,7 +25,7 @@ Los últimos avances en las plataformas de simulación enfocadas al desarrollo d
 
 
 
-\section{Solución propuesta}
+\section{Objetivos}
 El objetivo propuesto consiste en diseñar la arquitectura de un sistema modular capaz de controlar un cuadrirrotor a través de un circuito de carreras de forma autónoma.
 
 Debido a la gran complejidad que presenta el desarrollo completo de todos los módulos que intervienen en un dron de carreras autónomo, se han simplificado el desarrollo de los módulos de estimación de estado y de percepción del circuito, empleando datos provistos por el simulador. Es por esto que el trabajo se ha centrado en el desarrollo de la arquitectura del sistema y en el desarrollo de los módulos de control y generación de trayectorias, los cuales deben ser capaces de generar y seguir trayectorias agresivas a lo largo de todo el circuito a altas velocidades y con incertidumbre sobre el recorrido en sí.
@@ -44,9 +44,6 @@ Para desarrollar los algoritmos y comparar el rendimiento del sistema realizado,
 %	\item \textbf{Generación de trayectorias:}
 %\end{itemize}
 
-\section{Objetivos}
-
-
 Para poder llevar a cabo el desarrollo del trabajo de forma adecuada es conveniente desgranar los objetivos principales en tareas de alcance más reducido:
 
 \begin{itemize}
@@ -54,8 +51,7 @@ Para poder llevar a cabo el desarrollo del trabajo de forma adecuada es convenie
 	\begin{itemize}
 		\item Modelado dinámico del comportamiento de un cuadricóptero.
 		\item Estudio del estado del arte acerca de los algoritmos de control más relevantes en las carreras de drones.
-		\item Desarrollo teórico de los algoritmos de control para ángulos pequeños
-		y para ángulos grandes.
+		\item Desarrollo teórico de los algoritmos de control para ángulos pequeños ($\phi,\theta  < \pi/6$) y para ángulos grandes ($\phi,\theta  \ge \pi/6 $) .
 		\item Implementación de ambos algoritmos dentro del módulo de control.
 		\item Ajuste de los parámetros de los controladores.
 		\item Evaluación del rendimiento de ambos controladores en un entorno simulado.
